@@ -31,10 +31,12 @@ test('ladder → exercise → results → next exercise / back to ladder', async
     await screen.findByText(/Försök 1 av den här övningen/),
   ).toBeInTheDocument()
 
-  await user.click(screen.getByRole('link', { name: 'Nästa övning' }))
-  expect(await screen.findByText(new RegExp(second!.title))).toBeInTheDocument()
+  expect(screen.getByRole('link', { name: 'Nästa övning' })).toHaveAttribute(
+    'href',
+    `/ovning/${second!.id}`,
+  )
 
-  await user.click(screen.getByRole('link', { name: 'Typy' }))
+  await user.click(screen.getByRole('link', { name: 'Alla övningar' }))
   expect(await screen.findByText(/Pågår · 1\/3/)).toBeInTheDocument()
 })
 

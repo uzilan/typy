@@ -1,4 +1,4 @@
-import { Link, Route, Routes } from 'react-router'
+import { Route, Routes } from 'react-router'
 import { LadderScreen } from './features/ladder/LadderScreen'
 import { ExerciseRoute } from './features/routes/ExerciseRoute'
 import { NotFound } from './features/routes/NotFound'
@@ -18,9 +18,6 @@ function App({ store = defaultStore }: { store?: AttemptStore }) {
     <AttemptStoreContext value={store}>
       <div className={styles.page}>
         <header className={styles.header}>
-          <Link to="/" className={styles.logo}>
-            Typy
-          </Link>
           <ThemeToggle />
         </header>
         <main>
