@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import type { Source } from '../../content/passages'
 import type { Session } from '../../engine/session'
 import { toAttempt } from '../../storage/attempt'
 import { useAttemptStore } from '../../storage/AttemptStoreContext'
@@ -11,6 +12,7 @@ interface Props {
   level: string
   title: string
   text: string
+  source?: Source
   onShowResults: (attemptId: string) => void
 }
 
@@ -19,6 +21,7 @@ export function TypingScreen({
   level,
   title,
   text,
+  source,
   onShowResults,
 }: Props) {
   const {
@@ -100,6 +103,11 @@ export function TypingScreen({
             )
           })}
         </p>
+        {source && (
+          <p className={styles.source}>
+            Ur <cite>{source.work}</cite> av {source.author} ({source.year})
+          </p>
+        )}
 
         <div className={styles.field}>
           <label htmlFor="typing-input" className={styles.label}>

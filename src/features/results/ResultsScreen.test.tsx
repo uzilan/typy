@@ -1,5 +1,6 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { MemoryRouter } from 'react-router'
 import type { NewAttempt } from '../../storage/attempt'
 import { AttemptStoreContext } from '../../storage/AttemptStoreContext'
 import { InMemoryAttemptStore } from '../../storage/InMemoryAttemptStore'
@@ -24,7 +25,7 @@ function attempt(overrides: Partial<NewAttempt> = {}): NewAttempt {
 
 async function setup(
   attempts: NewAttempt[],
-  currentIndex = attempts.length - 1,
+  { nextHref = null as string | null, attemptId = '' } = {},
 ) {
   const store = new InMemoryAttemptStore()
   const saved = []
@@ -32,19 +33,49 @@ async function setup(
   const onRetry = vi.fn()
   render(
     <AttemptStoreContext value={store}>
-      <ResultsScreen
-        exerciseId="ex"
-        attemptId={saved[currentIndex]!.id}
-        level="Nivå 3 · Meningar"
-        title="Räven"
-        text={TEXT}
-        onRetry={onRetry}
-      />
+      <MemoryRouter>
+        <ResultsScreen
+          exerciseId="ex"
+          attemptId={attemptId || saved[saved.length - 1]!.id}
+          level="Nivå 3 · Meningar"
+          title="Räven"
+          text={TEXT}
+          nextHref={nextHref}
+          onRetry={onRetry}
+        />
+      </MemoryRouter>
     </AttemptStoreContext>,
   )
-  await screen.findByText('Klart!')
+  await screen.findByRole('heading', { level: 1 })
   return { onRetry }
 }
+
+test('links to the next exercise and back to all exercises', async () => {
+  await setup([attempt()], { nextHref: '/ovning/nasta' })
+
+  expect(screen.getByRole('link', { name: 'Nästa övning' })).toHaveAttribute(
+    'href',
+    '/ovning/nasta',
+  )
+  expect(screen.getByRole('link', { name: 'Alla övningar' })).toHaveAttribute(
+    'href',
+    '/',
+  )
+})
+
+test('no next link when there is no next exercise', async () => {
+  await setup([attempt()])
+
+  expect(screen.queryByRole('link', { name: 'Nästa övning' })).toBeNull()
+})
+
+test('an attempt that no longer exists says so', async () => {
+  await setup([attempt()], { attemptId: 'gone' })
+
+  expect(
+    screen.getByRole('heading', { name: 'Resultatet finns inte längre' }),
+  ).toBeInTheDocument()
+})
 
 test('shows the stats of the current attempt', async () => {
   await setup([attempt()])

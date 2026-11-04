@@ -96,6 +96,12 @@ export const LEVELS: Level[] = SPECS.map((spec) => ({
   }),
 }))
 
+/** "Nivå 1 · Korta ord" */
+export function levelLabel(levelNumber: number): string {
+  const level = LEVELS.find((l) => l.number === levelNumber)
+  return level ? `Nivå ${level.number} · ${level.name}` : `Nivå ${levelNumber}`
+}
+
 export function findExercise(id: string): Exercise | undefined {
   for (const level of LEVELS) {
     const e = level.exercises.find((e) => e.id === id)

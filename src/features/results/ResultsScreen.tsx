@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router'
 import type { Attempt } from '../../storage/attempt'
 import { useAttemptStore } from '../../storage/AttemptStoreContext'
 import { formatDuration } from '../typing/formatDuration'
@@ -11,6 +12,8 @@ interface Props {
   level: string
   title: string
   text: string
+  /** Link to the next exercise, or null if there is none (yet). */
+  nextHref: string | null
   onRetry: () => void
 }
 
@@ -27,6 +30,7 @@ export function ResultsScreen({
   level,
   title,
   text,
+  nextHref,
   onRetry,
 }: Props) {
   const store = useAttemptStore()
@@ -43,6 +47,22 @@ export function ResultsScreen({
   }, [store, exerciseId])
 
   if (attempts === null) return <p className={styles.loading}>Laddar…</p>
+  if (!attempts.some((a) => a.id === attemptId)) {
+    // E.g. after a reload: in-memory attempts are gone.
+    return (
+      <div className={styles.screen}>
+        <h1 className={styles.title}>Resultatet finns inte längre</h1>
+        <p className={styles.note}>
+          Resultat sparas bara tills sidan laddas om.
+        </p>
+        <div className={styles.actions}>
+          <Link to="/" className={styles.secondary}>
+            Alla övningar
+          </Link>
+        </div>
+      </div>
+    )
+  }
 
   const { current, attemptNumber, isBest, rows } = summarize(
     attempts,
@@ -83,6 +103,14 @@ export function ResultsScreen({
         <button type="button" className={styles.primary} onClick={onRetry}>
           Försök igen
         </button>
+        {nextHref && (
+          <Link to={nextHref} className={styles.secondary}>
+            Nästa övning
+          </Link>
+        )}
+        <Link to="/" className={styles.tertiary}>
+          Alla övningar
+        </Link>
       </div>
 
       <section className={styles.card}>

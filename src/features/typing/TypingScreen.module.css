@@ -35,6 +35,13 @@
   overflow-wrap: break-word;
 }
 
+.source {
+  margin: -12px 0 0;
+  padding: 0 18px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
 .target span {
   border-radius: 2px;
 }

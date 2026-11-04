@@ -61,6 +61,24 @@
   cursor: pointer;
 }
 
+.secondary,
+.tertiary {
+  font-weight: 500;
+  padding: 12px 22px;
+  border-radius: 10px;
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.secondary {
+  border: 1px solid var(--border-strong);
+}
+
+.tertiary {
+  color: var(--muted);
+  padding-inline: 8px;
+}
+
 .card {
   background: var(--surface);
   border: 1px solid var(--border);

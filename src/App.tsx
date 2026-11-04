@@ -1,53 +1,38 @@
-import { useState } from 'react'
-import { LEVELS, type Exercise, type Level } from './content/levels'
-import { ResultsScreen } from './features/results/ResultsScreen'
-import { TypingScreen } from './features/typing/TypingScreen'
+import { Link, Route, Routes } from 'react-router'
+import { LadderScreen } from './features/ladder/LadderScreen'
+import { ExerciseRoute } from './features/routes/ExerciseRoute'
+import { NotFound } from './features/routes/NotFound'
+import { ResultsRoute } from './features/routes/ResultsRoute'
 import { AttemptStoreContext } from './storage/AttemptStoreContext'
+import type { AttemptStore } from './storage/AttemptStore'
 import { InMemoryAttemptStore } from './storage/InMemoryAttemptStore'
 import { ThemeToggle } from './theme/ThemeToggle'
 import styles from './App.module.css'
 
 // In memory until Firebase (phase 9): attempts are lost on reload.
-const attemptStore = new InMemoryAttemptStore()
+const defaultStore = new InMemoryAttemptStore()
 
-// First exercise until the level ladder arrives (phase 5b).
-const level = LEVELS[0] as Level
-const exercise = level.exercises[0] as Exercise
-const EXERCISE = {
-  exerciseId: exercise.id,
-  level: `Nivå ${level.number} · ${level.name}`,
-  title: exercise.title,
-  text: exercise.text,
-}
-
-// Simple screen state; a router comes when there are more screens (phase 5).
-type View = { name: 'typing' } | { name: 'results'; attemptId: string }
-
-function App() {
-  const [view, setView] = useState<View>({ name: 'typing' })
-
+/** Expects to be rendered inside a router (BrowserRouter in main.tsx). */
+function App({ store = defaultStore }: { store?: AttemptStore }) {
   return (
-    <AttemptStoreContext value={attemptStore}>
+    <AttemptStoreContext value={store}>
       <div className={styles.page}>
         <header className={styles.header}>
-          <span className={styles.logo}>Typy</span>
+          <Link to="/" className={styles.logo}>
+            Typy
+          </Link>
           <ThemeToggle />
         </header>
         <main>
-          {view.name === 'typing' ? (
-            <TypingScreen
-              {...EXERCISE}
-              onShowResults={(attemptId) =>
-                setView({ name: 'results', attemptId })
-              }
+          <Routes>
+            <Route path="/" element={<LadderScreen />} />
+            <Route path="/ovning/:id" element={<ExerciseRoute />} />
+            <Route
+              path="/ovning/:id/resultat/:attemptId"
+              element={<ResultsRoute />}
             />
-          ) : (
-            <ResultsScreen
-              {...EXERCISE}
-              attemptId={view.attemptId}
-              onRetry={() => setView({ name: 'typing' })}
-            />
-          )}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </main>
       </div>
     </AttemptStoreContext>
