@@ -18,7 +18,7 @@ Each phase gets its own detailed plan when we start it.
 6. ✅ **In-memory storage** (done before 4, so the results screen has real history) — attempt history behind a storage interface (so Firebase can replace it later without touching the UI).
 7. ✅ **Progress overview** — history, personal bests, trends over time, repeat any exercise.
 8. **Visual polish** — design pass based on mockup learnings.
-9. **Firebase** — auth + Firestore implementation of the storage interface.
+9. ✅ **Firebase** — required Google sign-in, Firestore storage (`users/{uid}/attempts`), security rules, hosting. Live at <https://typy-1b7fc.web.app>.
 10. **Extras (maybe)** — weak-key analysis, custom texts, keyboard heatmap, etc.
 
 ## UI decisions
