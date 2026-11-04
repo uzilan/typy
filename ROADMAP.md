@@ -13,7 +13,7 @@ Each phase gets its own detailed plan when we start it.
 3. ✅ **Typing screen** — target text with the input line below it, live per-character feedback, start/finish detection.
 4. **Results screen** — stats for the finished run, compared with previous attempts of the same exercise.
 5. **Exercises & levels** — data model + initial Swedish content, organized by level. Picker screen.
-6. **In-memory storage** — attempt history behind a storage interface (so Firebase can replace it later without touching the UI).
+6. ✅ **In-memory storage** (done before 4, so the results screen has real history) — attempt history behind a storage interface (so Firebase can replace it later without touching the UI).
 7. **Progress overview** — history, personal bests, trends over time, repeat any exercise.
 8. **Visual polish** — design pass based on mockup learnings.
 9. **Firebase** — auth + Firestore implementation of the storage interface.

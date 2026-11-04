@@ -1,15 +1,19 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import type { Session } from '../../engine/session'
+import { toAttempt } from '../../storage/attempt'
+import { useAttemptStore } from '../../storage/AttemptStoreContext'
 import { formatDuration } from './formatDuration'
 import { useTypingSession } from './useTypingSession'
 import styles from './TypingScreen.module.css'
 
 interface Props {
+  exerciseId: string
   level: string
   title: string
   text: string
 }
 
-export function TypingScreen({ level, title, text }: Props) {
+export function TypingScreen({ exerciseId, level, title, text }: Props) {
   const {
     session,
     inputValue,
@@ -25,6 +29,15 @@ export function TypingScreen({ level, title, text }: Props) {
   const [round, setRound] = useState(0)
   const [rows, setRows] = useState(1)
   const done = stats !== null
+
+  // Save each finished session exactly once.
+  const store = useAttemptStore()
+  const savedSession = useRef<Session | null>(null)
+  useEffect(() => {
+    if (session.finishedAt === null || savedSession.current === session) return
+    savedSession.current = session
+    void store.add(toAttempt(session, exerciseId))
+  }, [session, store, exerciseId])
 
   // Focus on mount and after each restart (once the input is enabled again).
   useEffect(() => {

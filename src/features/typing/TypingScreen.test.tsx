@@ -1,19 +1,26 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { TypingScreen } from './TypingScreen'
 import { formatDuration } from './formatDuration'
+import { AttemptStoreContext } from '../../storage/AttemptStoreContext'
+import { InMemoryAttemptStore } from '../../storage/InMemoryAttemptStore'
 
 function setup(text = 'räv') {
   const user = userEvent.setup()
+  const store = new InMemoryAttemptStore()
+  const add = vi.spyOn(store, 'add')
   render(
-    <TypingScreen
-      level="Nivå 3 · Meningar"
-      title="Räven vid sjön"
-      text={text}
-    />,
+    <AttemptStoreContext value={store}>
+      <TypingScreen
+        exerciseId="raven-vid-sjon"
+        level="Nivå 3 · Meningar"
+        title="Räven vid sjön"
+        text={text}
+      />
+    </AttemptStoreContext>,
   )
   const input = screen.getByLabelText('Skriv texten ovan här')
-  return { user, input }
+  return { user, input, store, add }
 }
 
 function charStates() {
@@ -81,6 +88,45 @@ test('Börja om resets and refocuses the input', async () => {
   expect(input).toBeEnabled()
   expect(input).toHaveFocus()
   expect(charStates()).toEqual(['current', 'pending', 'pending'])
+})
+
+describe('saving attempts', () => {
+  test('saves one attempt when finished', async () => {
+    const { user, input, store, add } = setup()
+
+    await user.type(input, 'rav')
+
+    await waitFor(() => expect(add).toHaveBeenCalledTimes(1))
+    const [saved] = await store.listByExercise('raven-vid-sjon')
+    expect(saved).toMatchObject({
+      exerciseId: 'raven-vid-sjon',
+      accuracy: 67,
+      errors: 1,
+      errorPositions: [1],
+      missesByChar: { ä: 1 },
+    })
+  })
+
+  test('does not save when restarted before finishing', async () => {
+    const { user, input, add } = setup()
+
+    await user.type(input, 'rä')
+    await user.click(screen.getByRole('button', { name: 'Börja om' }))
+
+    expect(add).not.toHaveBeenCalled()
+  })
+
+  test('each finished round is saved once', async () => {
+    const { user, input, store } = setup()
+
+    await user.type(input, 'räv')
+    await user.click(screen.getByRole('button', { name: 'Börja om' }))
+    await user.type(input, 'räv')
+
+    await waitFor(async () =>
+      expect(await store.listByExercise('raven-vid-sjon')).toHaveLength(2),
+    )
+  })
 })
 
 describe('formatDuration', () => {
