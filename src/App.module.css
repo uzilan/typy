@@ -1,17 +1,36 @@
 .page {
-  position: relative;
   max-width: 960px;
   margin: 0 auto;
   padding: 24px 16px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-/*
- * The theme toggle sits in the top-right corner, level with each screen's
- * first row (which is 44px tall and leaves room on the right), so no
- * separate header row is needed.
- */
 .header {
-  position: absolute;
-  top: 24px;
-  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.nav {
+  display: flex;
+  gap: 20px;
+}
+
+.navLink {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 15px;
+  padding: 12px 0;
+}
+
+.navLink:hover {
+  color: var(--fg);
+}
+
+.navLink[aria-current='page'] {
+  color: var(--fg);
+  font-weight: 600;
 }

@@ -25,3 +25,8 @@ dist-ssr
 
 # Playwright MCP output
 .playwright-mcp
+
+# Firebase local cache and AI-assistant skills (not part of the app)
+.firebase/
+.agents/
+.claude/skills/

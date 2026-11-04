@@ -16,7 +16,7 @@ Each phase gets its own detailed plan when we start it.
    - ✅ **5a Content & data** — passages from public-domain Swedish literature (mainly Lagerlöf, *Nils Holgerssons underbara resa*; some Söderberg), post-1906 spelling only, untypeable characters normalized (” → ", – → -, … → ...). Levels derived deterministically from passages: short words → long words → sentences → punctuation & dialogue → whole passages.
    - ✅ **5b Screens** — level ladder (sequential unlock), router.
 6. ✅ **In-memory storage** (done before 4, so the results screen has real history) — attempt history behind a storage interface (so Firebase can replace it later without touching the UI).
-7. **Progress overview** — history, personal bests, trends over time, repeat any exercise.
+7. ✅ **Progress overview** — history, personal bests, trends over time, repeat any exercise.
 8. **Visual polish** — design pass based on mockup learnings.
 9. **Firebase** — auth + Firestore implementation of the storage interface.
 10. **Extras (maybe)** — weak-key analysis, custom texts, keyboard heatmap, etc.

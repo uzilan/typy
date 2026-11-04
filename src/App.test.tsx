@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
 import App from './App'
@@ -57,6 +57,25 @@ test('Försök igen returns to a fresh typing screen', async () => {
 test('a locked exercise redirects to the ladder', async () => {
   renderAt(`/ovning/${LEVELS[1]!.exercises[0]!.id}`)
 
+  expect(
+    await screen.findByRole('heading', { name: 'Övningar' }),
+  ).toBeInTheDocument()
+})
+
+test('the menu leads to progress and back to the exercises', async () => {
+  const user = userEvent.setup()
+  renderAt(`/ovning/${LEVELS[0]!.exercises[0]!.id}`)
+  const menu = await screen.findByRole('navigation', { name: 'Huvudmeny' })
+
+  await user.click(within(menu).getByRole('link', { name: 'Mina framsteg' }))
+  expect(
+    await screen.findByRole('heading', { name: 'Mina framsteg' }),
+  ).toBeInTheDocument()
+  expect(
+    within(menu).getByRole('link', { name: 'Mina framsteg' }),
+  ).toHaveAttribute('aria-current', 'page')
+
+  await user.click(within(menu).getByRole('link', { name: 'Övningar' }))
   expect(
     await screen.findByRole('heading', { name: 'Övningar' }),
   ).toBeInTheDocument()

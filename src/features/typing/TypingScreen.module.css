@@ -4,13 +4,8 @@
   gap: 28px;
 }
 
-/* First row: 44px tall, level with the theme toggle in the top-right corner. */
 .crumb {
   margin: 0;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  padding-right: 60px;
   font-size: 14px;
   color: var(--muted);
 }
