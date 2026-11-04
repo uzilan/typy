@@ -1,14 +1,17 @@
 .page {
+  position: relative;
   max-width: 960px;
   margin: 0 auto;
   padding: 24px 16px 48px;
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
 }
 
+/*
+ * The theme toggle sits in the top-right corner, level with each screen's
+ * first row (which is 44px tall and leaves room on the right), so no
+ * separate header row is needed.
+ */
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  position: absolute;
+  top: 24px;
+  right: 16px;
 }

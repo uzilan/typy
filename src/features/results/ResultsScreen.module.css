@@ -11,6 +11,14 @@
   color: var(--muted);
 }
 
+/* First row: 44px tall, level with the theme toggle in the top-right corner. */
+.crumb {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding-right: 60px;
+}
+
 .summary {
   display: flex;
   flex-direction: column;
