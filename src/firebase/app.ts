@@ -2,14 +2,21 @@ import { initializeApp } from 'firebase/app'
 import { connectAuthEmulator, getAuth } from 'firebase/auth'
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
 
-// Web config is not secret; access is controlled by Auth and firestore.rules.
+// Read from .env (not in git; see .env.example). The values end up in the
+// built JS anyway; access is controlled by Auth and firestore.rules.
+function env(name: string): string {
+  const value = import.meta.env[name] as string | undefined
+  if (!value) throw new Error(`Missing ${name} (copy .env.example to .env)`)
+  return value
+}
+
 const firebaseConfig = {
-  apiKey: 'REMOVED',
-  authDomain: 'typy-1b7fc.firebaseapp.com',
-  projectId: 'typy-1b7fc',
-  storageBucket: 'typy-1b7fc.firebasestorage.app',
-  messagingSenderId: '929545563277',
-  appId: '1:929545563277:web:ddf16903c09c829d2a86c4',
+  apiKey: env('VITE_FIREBASE_API_KEY'),
+  authDomain: env('VITE_FIREBASE_AUTH_DOMAIN'),
+  projectId: env('VITE_FIREBASE_PROJECT_ID'),
+  storageBucket: env('VITE_FIREBASE_STORAGE_BUCKET'),
+  messagingSenderId: env('VITE_FIREBASE_MESSAGING_SENDER_ID'),
+  appId: env('VITE_FIREBASE_APP_ID'),
 }
 
 export const app = initializeApp(firebaseConfig)
