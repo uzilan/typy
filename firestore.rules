@@ -1,0 +1,102 @@
+rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Collection: users/{uid}/attempts
+// Document ID: auto-generated
+// Owner: the user whose uid is in the path. Attempts are written once
+// (when an exercise is finished) and never changed or deleted by clients.
+// Fields:
+//   - exerciseId: string (required, 1–100 chars) - which exercise
+//   - finishedAt: int (required, epoch ms, within the last 24 h and not
+//     more than 5 min in the future) - when it was finished
+//   - wpm: int (required, 0–2000) - words per minute
+//   - accuracy: int (required, 0–100) - percent
+//   - elapsedMs: int (required, 0–3 600 000) - duration
+//   - errors: int (required, 0–100 000) - wrong characters typed
+//   - keystrokes: int (required, 0–100 000) - characters typed
+//   - errorPositions: list (required, ≤ 2000 items) - positions typed wrong
+//   - missesByChar: map (required, ≤ 200 keys) - errors per expected char
+//
+// No other collections are used; everything else is denied.
+//
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    function isIntInRange(value, min, max) {
+      return value is int && value >= min && value <= max;
+    }
+
+    function isValidList(list, maxSize) {
+      return list is list && list.size() <= maxSize;
+    }
+
+    // finishedAt must be close to the server's clock.
+    function isRecentMillis(ms) {
+      return ms is int &&
+        ms > request.time.toMillis() - 24 * 60 * 60 * 1000 &&
+        ms <= request.time.toMillis() + 5 * 60 * 1000;
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+
+    function isValidAttempt(data) {
+      let fields = ['exerciseId', 'finishedAt', 'wpm', 'accuracy',
+        'elapsedMs', 'errors', 'keystrokes', 'errorPositions', 'missesByChar'];
+      return hasRequiredFields(fields) &&
+        hasOnlyAllowedFields(fields) &&
+        data.exerciseId is string &&
+        data.exerciseId.size() >= 1 && data.exerciseId.size() <= 100 &&
+        isRecentMillis(data.finishedAt) &&
+        isIntInRange(data.wpm, 0, 2000) &&
+        isIntInRange(data.accuracy, 0, 100) &&
+        isIntInRange(data.elapsedMs, 0, 3600000) &&
+        isIntInRange(data.errors, 0, 100000) &&
+        isIntInRange(data.keystrokes, 0, 100000) &&
+        isValidList(data.errorPositions, 2000) &&
+        data.missesByChar is map && data.missesByChar.size() <= 200;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{userId}/attempts/{attemptId} {
+      // Owner only. Covers the app's queries: all attempts ordered by
+      // finishedAt, and attempts filtered by exerciseId.
+      allow read: if isOwner(userId);
+
+      // Written once, by the owner, with a valid schema.
+      allow create: if isOwner(userId) && isValidAttempt(request.resource.data);
+
+      // Attempts are a history: no client edits or deletions.
+      allow update, delete: if false;
+    }
+  }
+}

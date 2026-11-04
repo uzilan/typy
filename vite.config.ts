@@ -9,5 +9,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
+    // Emulator tests run separately: npm run test:emulator
+    exclude: ['**/node_modules/**', '**/*.emulator.test.ts'],
   },
 })

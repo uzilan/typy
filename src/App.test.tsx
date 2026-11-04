@@ -88,3 +88,17 @@ test('an unknown exercise shows a not-found message', async () => {
     await screen.findByRole('heading', { name: 'Övningen finns inte.' }),
   ).toBeInTheDocument()
 })
+
+test('Logga ut signs out', async () => {
+  const user = userEvent.setup()
+  const onSignOut = vi.fn()
+  render(
+    <MemoryRouter>
+      <App store={new InMemoryAttemptStore()} onSignOut={onSignOut} />
+    </MemoryRouter>,
+  )
+
+  await user.click(screen.getByRole('button', { name: 'Logga ut' }))
+
+  expect(onSignOut).toHaveBeenCalledTimes(1)
+})

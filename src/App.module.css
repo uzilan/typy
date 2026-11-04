@@ -30,6 +30,26 @@
   color: var(--fg);
 }
 
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.signOut {
+  font: inherit;
+  font-size: 14px;
+  color: var(--muted);
+  background: none;
+  border: none;
+  padding: 12px 4px;
+  cursor: pointer;
+}
+
+.signOut:hover {
+  color: var(--fg);
+}
+
 .navLink[aria-current='page'] {
   color: var(--fg);
   font-weight: 600;

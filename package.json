@@ -11,16 +11,21 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "test:emulator": "firebase emulators:exec --only auth,firestore --project demo-typy 'vitest run --config vitest.emulator.config.ts'",
+    "emulators": "firebase emulators:start --only auth,firestore --project typy-1b7fc",
+    "dev:emulator": "VITE_USE_EMULATORS=true vite"
   },
   "dependencies": {
     "@fontsource/inter": "^5.3.0",
     "@fontsource/jetbrains-mono": "^5.3.0",
+    "firebase": "^13.2.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-router": "^8.5.1"
   },
   "devDependencies": {
+    "@firebase/rules-unit-testing": "^6.0.0",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.8",

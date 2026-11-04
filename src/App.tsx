@@ -6,15 +6,17 @@ import { NotFound } from './features/routes/NotFound'
 import { ResultsRoute } from './features/routes/ResultsRoute'
 import { AttemptStoreContext } from './storage/AttemptStoreContext'
 import type { AttemptStore } from './storage/AttemptStore'
-import { InMemoryAttemptStore } from './storage/InMemoryAttemptStore'
 import { ThemeToggle } from './theme/ThemeToggle'
 import styles from './App.module.css'
 
-// In memory until Firebase (phase 9): attempts are lost on reload.
-const defaultStore = new InMemoryAttemptStore()
+interface Props {
+  /** The signed-in user's attempts. */
+  store: AttemptStore
+  onSignOut?: () => void
+}
 
-/** Expects to be rendered inside a router (BrowserRouter in main.tsx). */
-function App({ store = defaultStore }: { store?: AttemptStore }) {
+/** The signed-in app. Expects a router around it (BrowserRouter in main.tsx). */
+function App({ store, onSignOut }: Props) {
   return (
     <AttemptStoreContext value={store}>
       <div className={styles.page}>
@@ -27,7 +29,18 @@ function App({ store = defaultStore }: { store?: AttemptStore }) {
               Mina framsteg
             </NavLink>
           </nav>
-          <ThemeToggle />
+          <div className={styles.actions}>
+            {onSignOut && (
+              <button
+                type="button"
+                className={styles.signOut}
+                onClick={onSignOut}
+              >
+                Logga ut
+              </button>
+            )}
+            <ThemeToggle />
+          </div>
         </header>
         <main>
           <Routes>

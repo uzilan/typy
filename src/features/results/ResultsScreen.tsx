@@ -48,12 +48,12 @@ export function ResultsScreen({
 
   if (attempts === null) return <p className={styles.loading}>Laddar…</p>
   if (!attempts.some((a) => a.id === attemptId)) {
-    // E.g. after a reload: in-memory attempts are gone.
+    // E.g. a link to someone else's attempt, or a mistyped address.
     return (
       <div className={styles.screen}>
-        <h1 className={styles.title}>Resultatet finns inte längre</h1>
+        <h1 className={styles.title}>Resultatet finns inte</h1>
         <p className={styles.note}>
-          Resultat sparas bara tills sidan laddas om.
+          Det här resultatet kunde inte hittas bland dina försök.
         </p>
         <div className={styles.actions}>
           <Link to="/" className={styles.secondary}>

@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Link } from 'react-router'
 import { findExercise } from '../../content/levels'
 import { useAllAttempts } from '../../storage/useAllAttempts'
-import { LineChart, niceScale } from './LineChart'
+import { LineChart } from './LineChart'
+import { niceScale } from './scale'
 import {
   progressSummary,
   RECENT_COUNT,

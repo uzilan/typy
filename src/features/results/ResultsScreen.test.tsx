@@ -73,7 +73,7 @@ test('an attempt that no longer exists says so', async () => {
   await setup([attempt()], { attemptId: 'gone' })
 
   expect(
-    screen.getByRole('heading', { name: 'Resultatet finns inte längre' }),
+    screen.getByRole('heading', { name: 'Resultatet finns inte' }),
   ).toBeInTheDocument()
 })
 

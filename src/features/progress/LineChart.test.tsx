@@ -1,5 +1,6 @@
 import { render, screen, within } from '@testing-library/react'
-import { LineChart, niceScale } from './LineChart'
+import { LineChart } from './LineChart'
+import { niceScale } from './scale'
 
 describe('niceScale', () => {
   test('starts at zero for speed, top rounded up to a whole step (at least 40)', () => {
