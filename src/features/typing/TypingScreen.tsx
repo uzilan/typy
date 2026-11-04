@@ -11,9 +11,16 @@ interface Props {
   level: string
   title: string
   text: string
+  onShowResults: (attemptId: string) => void
 }
 
-export function TypingScreen({ exerciseId, level, title, text }: Props) {
+export function TypingScreen({
+  exerciseId,
+  level,
+  title,
+  text,
+  onShowResults,
+}: Props) {
   const {
     session,
     inputValue,
@@ -30,14 +37,21 @@ export function TypingScreen({ exerciseId, level, title, text }: Props) {
   const [rows, setRows] = useState(1)
   const done = stats !== null
 
-  // Save each finished session exactly once.
+  // Save each finished session exactly once; remember its id for "Se resultat".
   const store = useAttemptStore()
   const savedSession = useRef<Session | null>(null)
+  const [saved, setSaved] = useState<{ session: Session; id: string } | null>(
+    null,
+  )
   useEffect(() => {
     if (session.finishedAt === null || savedSession.current === session) return
     savedSession.current = session
-    void store.add(toAttempt(session, exerciseId))
+    void store
+      .add(toAttempt(session, exerciseId))
+      .then((attempt) => setSaved({ session, id: attempt.id }))
   }, [session, store, exerciseId])
+  // Only the current session's save counts (a restart makes an older one stale).
+  const savedId = saved?.session === session ? saved.id : null
 
   // Focus on mount and after each restart (once the input is enabled again).
   useEffect(() => {
@@ -144,7 +158,12 @@ export function TypingScreen({ exerciseId, level, title, text }: Props) {
               {formatDuration(stats.elapsedMs)}
             </p>
           </div>
-          <button type="button" className={styles.primary} disabled>
+          <button
+            type="button"
+            className={styles.primary}
+            disabled={savedId === null}
+            onClick={() => savedId && onShowResults(savedId)}
+          >
             Se resultat
           </button>
         </div>

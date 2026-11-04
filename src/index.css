@@ -11,6 +11,9 @@
   --on-accent: #ffffff;
   --error: #b3261e;
   --error-bg: #fde3e1;
+  --highlight: #eef1fc;
+  --track: #eeeef2;
+  --bar: #a9aec2;
 
   --sans: Inter, system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
@@ -32,6 +35,9 @@
     --on-accent: #15161b;
     --error: #ff8a80;
     --error-bg: #4a1f1f;
+    --highlight: #252a40;
+    --track: #2a2b33;
+    --bar: #5a5f73;
     color-scheme: dark;
   }
 }
@@ -48,6 +54,9 @@
   --on-accent: #15161b;
   --error: #ff8a80;
   --error-bg: #4a1f1f;
+  --highlight: #252a40;
+  --track: #2a2b33;
+  --bar: #5a5f73;
   color-scheme: dark;
 }
 

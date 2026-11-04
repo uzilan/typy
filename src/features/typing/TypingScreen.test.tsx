@@ -16,12 +16,16 @@ function setup(text = 'räv') {
         level="Nivå 3 · Meningar"
         title="Räven vid sjön"
         text={text}
+        onShowResults={onShowResults}
       />
     </AttemptStoreContext>,
   )
   const input = screen.getByLabelText('Skriv texten ovan här')
-  return { user, input, store, add }
+  return { user, input, store, add, onShowResults }
 }
+
+const onShowResults = vi.fn()
+beforeEach(() => onShowResults.mockReset())
 
 function charStates() {
   return [...document.querySelectorAll('[data-state]')].map((el) =>
@@ -105,6 +109,16 @@ describe('saving attempts', () => {
       errorPositions: [1],
       missesByChar: { ä: 1 },
     })
+  })
+
+  test('Se resultat opens the saved attempt', async () => {
+    const { user, input, store } = setup()
+
+    await user.type(input, 'räv')
+    await user.click(await screen.findByRole('button', { name: 'Se resultat' }))
+
+    const [saved] = await store.listAll()
+    expect(onShowResults).toHaveBeenCalledWith(saved?.id)
   })
 
   test('does not save when restarted before finishing', async () => {

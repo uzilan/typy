@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { ResultsScreen } from './features/results/ResultsScreen'
 import { TypingScreen } from './features/typing/TypingScreen'
 import { AttemptStoreContext } from './storage/AttemptStoreContext'
 import { InMemoryAttemptStore } from './storage/InMemoryAttemptStore'
@@ -15,7 +17,12 @@ const EXERCISE = {
   text: 'Det var en gång en räv som bodde vid sjön. Varje morgon gick han ner till stranden för att dricka av det kalla vattnet.',
 }
 
+// Simple screen state; a router comes when there are more screens (phase 5).
+type View = { name: 'typing' } | { name: 'results'; attemptId: string }
+
 function App() {
+  const [view, setView] = useState<View>({ name: 'typing' })
+
   return (
     <AttemptStoreContext value={attemptStore}>
       <div className={styles.page}>
@@ -24,7 +31,20 @@ function App() {
           <ThemeToggle />
         </header>
         <main>
-          <TypingScreen {...EXERCISE} />
+          {view.name === 'typing' ? (
+            <TypingScreen
+              {...EXERCISE}
+              onShowResults={(attemptId) =>
+                setView({ name: 'results', attemptId })
+              }
+            />
+          ) : (
+            <ResultsScreen
+              {...EXERCISE}
+              attemptId={view.attemptId}
+              onRetry={() => setView({ name: 'typing' })}
+            />
+          )}
         </main>
       </div>
     </AttemptStoreContext>
