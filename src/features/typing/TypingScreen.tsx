@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { formatDuration } from './formatDuration'
 import { useTypingSession } from './useTypingSession'
 import styles from './TypingScreen.module.css'
@@ -20,14 +20,33 @@ export function TypingScreen({ level, title, text }: Props) {
     compositionEnd,
     restart,
   } = useTypingSession(text)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
+  const targetRef = useRef<HTMLParagraphElement>(null)
   const [round, setRound] = useState(0)
+  const [rows, setRows] = useState(1)
   const done = stats !== null
 
   // Focus on mount and after each restart (once the input is enabled again).
   useEffect(() => {
     inputRef.current?.focus()
   }, [round])
+
+  // Give the input as many lines as the target text wraps to.
+  // Both share font, size, line height and content width, so lines break alike.
+  useLayoutEffect(() => {
+    const el = targetRef.current
+    if (!el || typeof ResizeObserver === 'undefined') return
+    const measure = () => {
+      const lineHeight = parseFloat(getComputedStyle(el).lineHeight)
+      if (lineHeight > 0) {
+        setRows(Math.max(1, Math.round(el.clientHeight / lineHeight)))
+      }
+    }
+    measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   function handleRestart() {
     restart()
@@ -44,7 +63,7 @@ export function TypingScreen({ level, title, text }: Props) {
       </p>
 
       <div className={styles.card}>
-        <p className={styles.target}>
+        <p className={styles.target} ref={targetRef}>
           {[...session.target].map((ch, i) => {
             const state = charStates[i]
             return (
@@ -59,11 +78,11 @@ export function TypingScreen({ level, title, text }: Props) {
           <label htmlFor="typing-input" className={styles.label}>
             Skriv texten ovan här
           </label>
-          <input
+          <textarea
             id="typing-input"
             ref={inputRef}
             className={styles.input}
-            type="text"
+            rows={rows}
             value={inputValue}
             disabled={done}
             placeholder="Klicka här och börja skriva…"
@@ -71,6 +90,9 @@ export function TypingScreen({ level, title, text }: Props) {
             autoComplete="off"
             autoCorrect="off"
             autoCapitalize="off"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') e.preventDefault()
+            }}
             onChange={(e) => handleChange(e.target.value)}
             onCompositionStart={compositionStart}
             onCompositionEnd={(e) => compositionEnd(e.currentTarget.value)}

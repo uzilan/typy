@@ -20,12 +20,19 @@
   gap: 24px;
 }
 
+/*
+ * Target and input must wrap identically: same font, size, line height,
+ * and content width. The input's inline inset is padding 16px + border 2px,
+ * so the target gets 18px of inline padding to match.
+ */
 .target {
   margin: 0;
+  padding: 0 18px;
   font-family: var(--mono);
   font-size: 24px;
   line-height: 1.8;
   white-space: pre-wrap;
+  overflow-wrap: break-word;
 }
 
 .target span {
@@ -63,8 +70,14 @@
 }
 
 .input {
+  display: block;
   font-family: var(--mono);
   font-size: 24px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  resize: none;
+  overflow: hidden;
   padding: 14px 16px;
   border-radius: 10px;
   border: 2px solid var(--border-strong);

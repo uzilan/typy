@@ -40,6 +40,15 @@ test('marks characters as they are typed', async () => {
   expect(screen.getByText('2 / 3 tecken')).toBeInTheDocument()
 })
 
+test('Enter does not add a line break', async () => {
+  const { user, input } = setup()
+
+  await user.type(input, 'r{Enter}ä')
+
+  expect(input).toHaveValue('rä')
+  expect(charStates()).toEqual(['correct', 'correct', 'current'])
+})
+
 test('shows no stats while typing', async () => {
   const { user, input } = setup()
 
