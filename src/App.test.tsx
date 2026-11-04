@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import App from './App'
+import { LEVELS } from './content/levels'
 
 test('typing → results → try again', async () => {
   const user = userEvent.setup()
@@ -9,9 +10,7 @@ test('typing → results → try again', async () => {
   const input = screen.getByLabelText('Skriv texten ovan här')
   // Paste the whole text in one go (fast); the exercise finishes.
   await user.click(input)
-  await user.paste(
-    'Det var en gång en räv som bodde vid sjön. Varje morgon gick han ner till stranden för att dricka av det kalla vattnet.',
-  )
+  await user.paste(LEVELS[0]!.exercises[0]!.text)
 
   await user.click(await screen.findByRole('button', { name: 'Se resultat' }))
   expect(

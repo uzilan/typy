@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { LEVELS, type Exercise, type Level } from './content/levels'
 import { ResultsScreen } from './features/results/ResultsScreen'
 import { TypingScreen } from './features/typing/TypingScreen'
 import { AttemptStoreContext } from './storage/AttemptStoreContext'
@@ -9,12 +10,14 @@ import styles from './App.module.css'
 // In memory until Firebase (phase 9): attempts are lost on reload.
 const attemptStore = new InMemoryAttemptStore()
 
-// Hard-coded until exercises arrive in phase 5.
+// First exercise until the level ladder arrives (phase 5b).
+const level = LEVELS[0] as Level
+const exercise = level.exercises[0] as Exercise
 const EXERCISE = {
-  exerciseId: 'raven-vid-sjon',
-  level: 'Nivå 3 · Meningar',
-  title: 'Räven vid sjön',
-  text: 'Det var en gång en räv som bodde vid sjön. Varje morgon gick han ner till stranden för att dricka av det kalla vattnet.',
+  exerciseId: exercise.id,
+  level: `Nivå ${level.number} · ${level.name}`,
+  title: exercise.title,
+  text: exercise.text,
 }
 
 // Simple screen state; a router comes when there are more screens (phase 5).

@@ -12,7 +12,9 @@ Each phase gets its own detailed plan when we start it.
 2. ✅ **Typing engine** — pure TS logic: compare input vs target per character, errors, WPM, accuracy, timing. Fully unit-tested, no UI. Must handle Unicode/Swedish chars correctly (incl. NFC normalization of composed chars).
 3. ✅ **Typing screen** — target text with the input line below it, live per-character feedback, start/finish detection.
 4. ✅ **Results screen** — stats for the finished run, compared with previous attempts of the same exercise.
-5. **Exercises & levels** — data model + initial Swedish content, organized by level. Picker screen.
+5. **Exercises & levels** — split in two:
+   - ✅ **5a Content & data** — passages from public-domain Swedish literature (mainly Lagerlöf, *Nils Holgerssons underbara resa*; some Söderberg), post-1906 spelling only, untypeable characters normalized (” → ", – → -, … → ...). Levels derived deterministically from passages: short words → long words → sentences → punctuation & dialogue → whole passages.
+   - **5b Screens** — level ladder (sequential unlock), router.
 6. ✅ **In-memory storage** (done before 4, so the results screen has real history) — attempt history behind a storage interface (so Firebase can replace it later without touching the UI).
 7. **Progress overview** — history, personal bests, trends over time, repeat any exercise.
 8. **Visual polish** — design pass based on mockup learnings.
@@ -35,6 +37,5 @@ Mockups: <https://claude.ai/artifact/9tvMBF4B979R6gRRdRyEUP>
 
 - Backspace allowed or not; how errors are counted
 - Input handling: real `<input>` vs captured keystrokes (dead keys / composition events on Swedish layout favor a real input)
-- Source of Swedish texts (hand-written, public-domain literature, word-frequency lists)
 - Charting library for progress
 - Auth method once Firebase arrives
