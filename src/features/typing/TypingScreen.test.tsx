@@ -85,11 +85,12 @@ test('Börja om resets and refocuses the input', async () => {
 
 describe('formatDuration', () => {
   test.each([
-    [0, '0:00'],
-    [999, '0:00'],
-    [44_000, '0:44'],
-    [65_500, '1:05'],
-    [600_000, '10:00'],
+    [0, '0 s'],
+    [999, '0 s'],
+    [44_000, '44 s'],
+    [60_000, '1 min'],
+    [65_500, '1 min 5 s'],
+    [600_000, '10 min'],
   ])('%i ms → %s', (ms, text) => {
     expect(formatDuration(ms)).toBe(text)
   })
