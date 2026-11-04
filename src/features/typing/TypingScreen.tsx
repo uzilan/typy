@@ -83,6 +83,9 @@ export function TypingScreen({ level, title, text }: Props) {
             ref={inputRef}
             className={styles.input}
             rows={rows}
+            // Browsers size `rows` inconsistently (some ignore line-height),
+            // so set the height explicitly: lines × line height + padding + border.
+            style={{ height: `calc(${rows} * 1.8em + 32px)` }}
             value={inputValue}
             disabled={done}
             placeholder="Klicka här och börja skriva…"
