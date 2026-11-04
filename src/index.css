@@ -1,0 +1,56 @@
+/* Theme tokens. Components use only these variables, never raw colors. */
+:root {
+  --bg: #fafaf7;
+  --surface: #ffffff;
+  --fg: #1d1d22;
+  --muted: #6b6b76;
+  --border: #e3e3e8;
+  --accent: #3a5bd9;
+  --correct: #2f8a4c;
+  --error: #c8352e;
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, 'SF Mono', Consolas, monospace;
+
+  color-scheme: light;
+}
+
+/* Dark values: system dark (unless user forced light), or user forced dark. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #15161b;
+    --surface: #1e1f26;
+    --fg: #e8e8ec;
+    --muted: #9a9aa6;
+    --border: #2e2f38;
+    --accent: #7d97ff;
+    --correct: #5cc47d;
+    --error: #ff6b63;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #15161b;
+  --surface: #1e1f26;
+  --fg: #e8e8ec;
+  --muted: #9a9aa6;
+  --border: #2e2f38;
+  --accent: #7d97ff;
+  --correct: #5cc47d;
+  --error: #ff6b63;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.5 var(--sans);
+}
