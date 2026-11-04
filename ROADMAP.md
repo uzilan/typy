@@ -9,7 +9,7 @@ Each phase gets its own detailed plan when we start it.
 
 0. ✅ **Scaffold** — Vite + React + TS, ESLint/Prettier, Vitest, folder layout.
 1. ✅ **Mockups** — low-fi mockups of all main screens (exercise picker, typing, results, progress). Iterate until the flow feels right.
-2. **Typing engine** — pure TS logic: compare input vs target per character, errors, WPM, accuracy, timing. Fully unit-tested, no UI. Must handle Unicode/Swedish chars correctly (incl. NFC normalization of composed chars).
+2. ✅ **Typing engine** — pure TS logic: compare input vs target per character, errors, WPM, accuracy, timing. Fully unit-tested, no UI. Must handle Unicode/Swedish chars correctly (incl. NFC normalization of composed chars).
 3. **Typing screen** — target text with the input line below it, live per-character feedback, start/finish detection.
 4. **Results screen** — stats for the finished run, compared with previous attempts of the same exercise.
 5. **Exercises & levels** — data model + initial Swedish content, organized by level. Picker screen.

@@ -1,16 +1,19 @@
 /* Theme tokens. Components use only these variables, never raw colors. */
 :root {
-  --bg: #fafaf7;
+  --bg: #f6f6f3;
   --surface: #ffffff;
   --fg: #1d1d22;
-  --muted: #6b6b76;
+  --muted: #5f5f6a;
+  --pending: #6b6b76;
   --border: #e3e3e8;
+  --border-strong: #c9c9d1;
   --accent: #3a5bd9;
-  --correct: #2f8a4c;
-  --error: #c8352e;
+  --on-accent: #ffffff;
+  --error: #b3261e;
+  --error-bg: #fde3e1;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, 'SF Mono', Consolas, monospace;
+  --sans: Inter, system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
 
   color-scheme: light;
 }
@@ -20,12 +23,15 @@
   :root:not([data-theme='light']) {
     --bg: #15161b;
     --surface: #1e1f26;
-    --fg: #e8e8ec;
-    --muted: #9a9aa6;
+    --fg: #ececf0;
+    --muted: #a0a0ac;
+    --pending: #8d8d99;
     --border: #2e2f38;
-    --accent: #7d97ff;
-    --correct: #5cc47d;
-    --error: #ff6b63;
+    --border-strong: #44454f;
+    --accent: #8ea4ff;
+    --on-accent: #15161b;
+    --error: #ff8a80;
+    --error-bg: #4a1f1f;
     color-scheme: dark;
   }
 }
@@ -33,12 +39,15 @@
 :root[data-theme='dark'] {
   --bg: #15161b;
   --surface: #1e1f26;
-  --fg: #e8e8ec;
-  --muted: #9a9aa6;
+  --fg: #ececf0;
+  --muted: #a0a0ac;
+  --pending: #8d8d99;
   --border: #2e2f38;
-  --accent: #7d97ff;
-  --correct: #5cc47d;
-  --error: #ff6b63;
+  --border-strong: #44454f;
+  --accent: #8ea4ff;
+  --on-accent: #15161b;
+  --error: #ff8a80;
+  --error-bg: #4a1f1f;
   color-scheme: dark;
 }
 
