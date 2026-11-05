@@ -12,7 +12,7 @@ export interface Exercise {
   levelNumber: number
   title: string
   text: string
-  source: Source
+  source?: Source
 }
 
 export interface Level {
@@ -37,7 +37,7 @@ const SPECS: LevelSpec[] = [
     name: 'Korta ord',
     description: 'Korta ord på 2–5 bokstäver.',
     slug: 'korta-ord',
-    passageIds: ['pojken', 'varvader', 'lydia'],
+    passageIds: ['bussen', 'fika', 'stugan', 'svamp', 'flytten'],
     build: (t) => shortWords(t, 20),
   },
   {
@@ -45,7 +45,7 @@ const SPECS: LevelSpec[] = [
     name: 'Långa ord',
     description: 'Långa och sammansatta ord.',
     slug: 'langa-ord',
-    passageIds: ['varvader', 'spegeln', 'smirre'],
+    passageIds: ['fika', 'stugan', 'svamp', 'flytten', 'snon'],
     build: (t) => longWords(t, 12),
   },
   {
@@ -53,7 +53,7 @@ const SPECS: LevelSpec[] = [
     name: 'Meningar',
     description: 'Hela meningar med stor bokstav, komma och punkt.',
     slug: 'meningar',
-    passageIds: ['varvader', 'spegeln', 'lydia'],
+    passageIds: ['bussen', 'stugan', 'svamp', 'flytten', 'snon'],
     build: (t) => plainSentences(t, 3),
   },
   {
@@ -61,15 +61,15 @@ const SPECS: LevelSpec[] = [
     name: 'Skiljetecken och dialog',
     description: 'Repliker, frågor och utrop.',
     slug: 'dialog',
-    passageIds: ['predikan', 'grasparven', 'smirre'],
+    passageIds: ['nycklarna', 'samtalet', 'restaurangen', 'cykeln', 'matchen'],
     build: (t) => punctuatedSentences(t, 3),
   },
   {
     number: 5,
     name: 'Längre texter',
-    description: 'Hela stycken ur böckerna.',
+    description: 'Hela stycken ur klassiska böcker.',
     slug: 'stycken',
-    passageIds: ['pojken', 'loften', 'lydia'],
+    passageIds: ['varvader', 'lydia', 'middagen', 'sparvagnen', 'humlan'],
     build: (t) => t,
   },
 ]

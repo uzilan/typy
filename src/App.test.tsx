@@ -22,7 +22,6 @@ test('ladder → exercise → results → next exercise / back to ladder', async
     await screen.findByRole('link', { name: new RegExp(first!.title) }),
   )
   const input = await screen.findByLabelText('Skriv texten ovan här')
-  expect(screen.getByText(/Ur/)).toHaveTextContent(first!.source.author)
 
   await user.click(input)
   await user.paste(first!.text)
@@ -37,7 +36,7 @@ test('ladder → exercise → results → next exercise / back to ladder', async
   )
 
   await user.click(screen.getByRole('link', { name: 'Alla övningar' }))
-  expect(await screen.findByText(/Pågår · 1\/3/)).toBeInTheDocument()
+  expect(await screen.findByText(/Pågår · 1\/5/)).toBeInTheDocument()
 })
 
 test('Försök igen returns to a fresh typing screen', async () => {
