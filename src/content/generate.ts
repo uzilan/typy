@@ -3,27 +3,6 @@
  * the same text, so attempts at an exercise stay comparable.
  */
 
-function uniqueWords(text: string): string[] {
-  const words = (text.match(/[\p{L}]+/gu) ?? []).map((w) => w.toLowerCase())
-  return [...new Set(words)]
-}
-
-/** Unique words of 2–5 letters, in order of appearance, lowercased. */
-export function shortWords(text: string, max: number): string {
-  return uniqueWords(text)
-    .filter((w) => w.length >= 2 && w.length <= 5)
-    .slice(0, max)
-    .join(' ')
-}
-
-/** Unique words of 8 or more letters, in order of appearance, lowercased. */
-export function longWords(text: string, max: number): string {
-  return uniqueWords(text)
-    .filter((w) => w.length >= 8)
-    .slice(0, max)
-    .join(' ')
-}
-
 /**
  * Splits after . ? ! (and a closing quote right after them), but never
  * inside a quotation, so dialogue stays whole.

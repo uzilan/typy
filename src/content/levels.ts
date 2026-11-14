@@ -1,9 +1,4 @@
-import {
-  longWords,
-  plainSentences,
-  punctuatedSentences,
-  shortWords,
-} from './generate'
+import { plainSentences, punctuatedSentences } from './generate'
 import { normalizeText } from './normalizeText'
 import { PASSAGES, type Passage, type Source } from './passages'
 
@@ -35,18 +30,25 @@ const SPECS: LevelSpec[] = [
   {
     number: 1,
     name: 'Korta ord',
-    description: 'Korta ord på 2–5 bokstäver.',
+    description:
+      'Enkla meningar med korta ord, utan stor bokstav och skiljetecken.',
     slug: 'korta-ord',
-    passageIds: ['bussen', 'fika', 'stugan', 'svamp', 'flytten'],
-    build: (t) => shortWords(t, 20),
+    passageIds: ['katten', 'frukost', 'parken', 'regn', 'taget'],
+    build: (t) => t,
   },
   {
     number: 2,
     name: 'Långa ord',
-    description: 'Långa och sammansatta ord.',
+    description: 'Meningar fulla av långa och sammansatta ord.',
     slug: 'langa-ord',
-    passageIds: ['fika', 'stugan', 'svamp', 'flytten', 'snon'],
-    build: (t) => longWords(t, 12),
+    passageIds: [
+      'kontoret',
+      'tradgarden',
+      'semestern',
+      'biblioteket',
+      'vintern',
+    ],
+    build: (t) => t,
   },
   {
     number: 3,

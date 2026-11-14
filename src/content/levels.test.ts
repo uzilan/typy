@@ -40,6 +40,29 @@ test('only the long-text level quotes literature', () => {
   }
 })
 
+const words = (text: string) => text.split(' ')
+
+test('drill levels are lowercase words without punctuation', () => {
+  for (const level of LEVELS.filter((l) => l.number <= 2)) {
+    for (const e of level.exercises)
+      expect(e.text, e.id).toMatch(/^[a-zåäö ]+$/)
+  }
+})
+
+test('level 1 uses only short words', () => {
+  for (const e of LEVELS[0]!.exercises) {
+    for (const w of words(e.text))
+      expect(w.length, `${e.id}: ${w}`).toBeLessThanOrEqual(5)
+  }
+})
+
+test('level 2 is rich in long words', () => {
+  for (const e of LEVELS[1]!.exercises) {
+    const long = words(e.text).filter((w) => w.length >= 8)
+    expect(long.length, e.id).toBeGreaterThanOrEqual(8)
+  }
+})
+
 test('findExercise looks up by id', () => {
   const first = exercises[0]!
   expect(findExercise(first.id)).toBe(first)

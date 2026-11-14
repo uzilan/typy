@@ -1,7 +1,9 @@
 /**
  * Two kinds of passages:
  * - Everyday texts in modern Swedish written for Typy (no source), used for
- *   the drill levels.
+ *   the drill levels. The first two levels' texts are lowercase without
+ *   punctuation: level 1 uses only words of at most five letters, level 2
+ *   is dense with long compound words.
  * - Excerpts from public-domain Swedish literature (post-1906 spelling),
  *   kept as published, used for the long-text level.
  * normalizeText() makes all text typeable when exercises are built.
@@ -50,6 +52,60 @@ const MARKURELL: Source = {
 }
 
 export const PASSAGES: Passage[] = [
+  // Level 1: short words only
+  {
+    id: 'katten',
+    title: 'Katten',
+    text: 'vi har en katt som heter mio han är grå och vit och väger fem kilo på dagen sover han i en låda i solen men när det är mörkt vill han ut och jaga möss när han är hemma igen vill han ha mat och sova i min säng',
+  },
+  {
+    id: 'frukost',
+    title: 'Frukost',
+    text: 'varje dag äter jag gröt med mjölk och lite sylt min bror vill ha ägg och en macka med ost mamma tar en kopp te och läser en bok pappa vill bara ha kaffe och går ut med vår hund',
+  },
+  {
+    id: 'parken',
+    title: 'I parken',
+    text: 'i dag gick vi till en park nära oss solen sken och det var varmt vi satt på en filt och åt glass två små barn lekte med en röd boll en äldre man gav mat åt ankor vid sjön',
+  },
+  {
+    id: 'regn',
+    title: 'Regn',
+    text: 'det har varit blött hela dagen vi är inne och ser på en film lisa bakar en kaka och hela huset får en god doft när det blir kväll är det över och vi går ut en sväng runt huset',
+  },
+  {
+    id: 'taget',
+    title: 'Tåget',
+    text: 'jag tar tåget till lena varje månad resan är lång men jag har med mig en bok och ett äpple när vi är nära ser jag ut på skog och sjöar lena står där och tar emot mig med en stor kram',
+  },
+
+  // Level 2: long words
+  {
+    id: 'kontoret',
+    title: 'Kontoret',
+    text: 'på morgonen sätter jag igång kaffebryggaren och startar datorn sedan läser jag igenom alla meddelanden från kollegorna eftermiddagen brukar försvinna i långa möten i konferensrummet och på fredagarna äter vi gemensam frukost i personalrummet',
+  },
+  {
+    id: 'tradgarden',
+    title: 'Trädgården',
+    text: 'i trädgården växer jordgubbar potatis och sockerärtor grannfrun har gett mig tomatplantor och solrosfrön varje kväll vattnar jag rabatterna med trädgårdsslangen och på helgerna klipper jag gräsmattan med den gamla gräsklipparen',
+  },
+  {
+    id: 'semestern',
+    title: 'Semestern',
+    text: 'under sommarsemestern reste familjen genom fjällvärlden med husbil vi övernattade på campingplatser och vandrade längs fjällbäckar och snötäckta bergstoppar barnen samlade stenar medan föräldrarna fotograferade solnedgångarna',
+  },
+  {
+    id: 'biblioteket',
+    title: 'Biblioteket',
+    text: 'stadsbiblioteket ligger mitt i centrum bredvid järnvägsstationen där finns skönlitteratur barnböcker tidningar och datorer som alla får använda bibliotekarierna hjälper besökarna att hitta rätt och på lördagarna läser författare högt ur sina nyskrivna romaner',
+  },
+  {
+    id: 'vintern',
+    title: 'Vintern',
+    text: 'när vintermörkret kommer tänder vi adventsljusen i köksfönstret och letar fram vinterjackorna och vantarna ute på sjöisen åker barnen skridskor och skolgården förvandlas till ett snölandskap på kvällarna dricker vi varm choklad framför brasan',
+  },
+
   // Modern everyday prose
   {
     id: 'bussen',
