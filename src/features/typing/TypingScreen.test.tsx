@@ -4,21 +4,30 @@ import { TypingScreen } from './TypingScreen'
 import { formatDuration } from './formatDuration'
 import { AttemptStoreContext } from '../../storage/AttemptStoreContext'
 import { InMemoryAttemptStore } from '../../storage/InMemoryAttemptStore'
+import { InMemorySettingsStore } from '../../storage/InMemorySettingsStore'
+import { SettingsStoreContext } from '../../storage/SettingsStoreContext'
 
-function setup(text = 'räv') {
+function setup(
+  text = 'räv',
+  levelNumber = 3,
+  settingsStore = new InMemorySettingsStore(),
+) {
   const user = userEvent.setup()
   const store = new InMemoryAttemptStore()
   const add = vi.spyOn(store, 'add')
   render(
-    <AttemptStoreContext value={store}>
-      <TypingScreen
-        exerciseId="raven-vid-sjon"
-        level="Nivå 3 · Meningar"
-        title="Räven vid sjön"
-        text={text}
-        onShowResults={onShowResults}
-      />
-    </AttemptStoreContext>,
+    <SettingsStoreContext value={settingsStore}>
+      <AttemptStoreContext value={store}>
+        <TypingScreen
+          exerciseId="raven-vid-sjon"
+          level="Nivå 3 · Meningar"
+          title="Räven vid sjön"
+          text={text}
+          levelNumber={levelNumber}
+          onShowResults={onShowResults}
+        />
+      </AttemptStoreContext>
+    </SettingsStoreContext>,
   )
   const input = screen.getByLabelText('Skriv texten ovan här')
   return { user, input, store, add, onShowResults }
@@ -154,4 +163,69 @@ describe('formatDuration', () => {
   ])('%i ms → %s', (ms, text) => {
     expect(formatDuration(ms)).toBe(text)
   })
+})
+
+const keyboard = () => document.querySelector('[data-key="f"]')
+
+test('level 0 shows the keyboard by default with the switch on', async () => {
+  setup('fff jjj', 0)
+
+  expect(
+    await screen.findByRole('switch', { name: 'Tangentbord' }),
+  ).toBeChecked()
+  expect(keyboard()).toBeInTheDocument()
+})
+
+test('level 1 hides the keyboard by default with the switch off', async () => {
+  setup('fff jjj', 1)
+
+  expect(
+    await screen.findByRole('switch', { name: 'Tangentbord' }),
+  ).not.toBeChecked()
+  expect(keyboard()).not.toBeInTheDocument()
+})
+
+test('toggling on shows the keyboard and remembers it', async () => {
+  const settingsStore = new InMemorySettingsStore()
+  const { user } = setup('fff jjj', 1, settingsStore)
+
+  await user.click(await screen.findByRole('switch', { name: 'Tangentbord' }))
+
+  expect(keyboard()).toBeInTheDocument()
+  await waitFor(async () =>
+    expect(await settingsStore.get()).toMatchObject({ showKeyboard: true }),
+  )
+})
+
+test('a saved showKeyboard: false hides the keyboard on level 0', async () => {
+  const settingsStore = new InMemorySettingsStore()
+  await settingsStore.update({ showKeyboard: false })
+  setup('fff jjj', 0, settingsStore)
+
+  expect(
+    await screen.findByRole('switch', { name: 'Tangentbord' }),
+  ).not.toBeChecked()
+  expect(keyboard()).not.toBeInTheDocument()
+})
+
+test('typing moves the next-key highlight', async () => {
+  const { user, input } = setup('fff jjj', 0)
+  await screen.findByRole('switch', { name: 'Tangentbord' })
+  expect(keyboard()).toHaveAttribute('data-next', 'true')
+
+  await user.type(input, 'fff')
+
+  expect(keyboard()).toHaveAttribute('data-next', 'false')
+  expect(document.querySelector('[data-key="Space"]')).toHaveAttribute(
+    'data-next',
+    'true',
+  )
+})
+
+test('toggling keeps focus in the input', async () => {
+  const { user, input } = setup('fff jjj', 1)
+
+  await user.click(await screen.findByRole('switch', { name: 'Tangentbord' }))
+
+  expect(input).toHaveFocus()
 })

@@ -29,6 +29,8 @@ export function ExerciseRoute() {
       title={exercise.title}
       text={exercise.text}
       source={exercise.source}
+      levelNumber={exercise.levelNumber}
+      allowedKeys={exercise.allowedKeys}
       onShowResults={(attemptId) =>
         navigate(`/ovning/${exercise.id}/resultat/${attemptId}`)
       }

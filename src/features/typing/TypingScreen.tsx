@@ -3,6 +3,8 @@ import type { Source } from '../../content/passages'
 import type { Session } from '../../engine/session'
 import { toAttempt } from '../../storage/attempt'
 import { useAttemptStore } from '../../storage/AttemptStoreContext'
+import { useSettings } from '../../storage/useSettings'
+import { Keyboard } from '../keyboard/Keyboard'
 import { formatDuration } from './formatDuration'
 import { useTypingSession } from './useTypingSession'
 import styles from './TypingScreen.module.css'
@@ -13,6 +15,8 @@ interface Props {
   title: string
   text: string
   source?: Source
+  levelNumber: number
+  allowedKeys?: string
   onShowResults: (attemptId: string) => void
 }
 
@@ -22,6 +26,8 @@ export function TypingScreen({
   title,
   text,
   source,
+  levelNumber,
+  allowedKeys,
   onShowResults,
 }: Props) {
   const {
@@ -78,6 +84,9 @@ export function TypingScreen({
     return () => observer.disconnect()
   }, [])
 
+  const { settings, update } = useSettings()
+  const showKeyboard = settings?.showKeyboard ?? levelNumber === 0
+
   function handleRestart() {
     restart()
     setRound((r) => r + 1)
@@ -88,9 +97,23 @@ export function TypingScreen({
 
   return (
     <div className={styles.screen}>
-      <p className={styles.crumb}>
-        {level} · {title}
-      </p>
+      <div className={styles.topRow}>
+        <p className={styles.crumb}>
+          {level} · {title}
+        </p>
+        <label className={styles.toggle}>
+          <input
+            type="checkbox"
+            role="switch"
+            checked={showKeyboard}
+            onChange={(e) => {
+              update({ showKeyboard: e.target.checked })
+              inputRef.current?.focus()
+            }}
+          />
+          Tangentbord
+        </label>
+      </div>
 
       <div className={styles.card}>
         <p className={styles.target} ref={targetRef}>
@@ -155,6 +178,13 @@ export function TypingScreen({
             {typedCount} / {total} tecken
           </span>
         </div>
+
+        {showKeyboard && (
+          <Keyboard
+            nextChar={session.target[session.typed.length]}
+            allowedKeys={allowedKeys}
+          />
+        )}
       </div>
 
       {stats && (
