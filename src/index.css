@@ -14,6 +14,15 @@
   --highlight: #eef1fc;
   --track: #eeeef2;
   --bar: #a9aec2;
+  --finger-lp: #fbd5d5;
+  --finger-lr: #fde3c3;
+  --finger-lm: #fbf0b8;
+  --finger-li: #d3efc9;
+  --finger-ri: #c9e9f2;
+  --finger-rm: #d3dcf7;
+  --finger-rr: #e4d6f5;
+  --finger-rp: #f6d3e8;
+  --finger-thumb: #e6e6ea;
 
   --sans: Inter, system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
@@ -38,6 +47,15 @@
     --highlight: #252a40;
     --track: #2a2b33;
     --bar: #5a5f73;
+    --finger-lp: #5a3333;
+    --finger-lr: #5a4429;
+    --finger-lm: #565029;
+    --finger-li: #2f4d2b;
+    --finger-ri: #274a55;
+    --finger-rm: #303d66;
+    --finger-rr: #46365e;
+    --finger-rp: #5a3250;
+    --finger-thumb: #3a3b44;
     color-scheme: dark;
   }
 }
@@ -57,6 +75,15 @@
   --highlight: #252a40;
   --track: #2a2b33;
   --bar: #5a5f73;
+  --finger-lp: #5a3333;
+  --finger-lr: #5a4429;
+  --finger-lm: #565029;
+  --finger-li: #2f4d2b;
+  --finger-ri: #274a55;
+  --finger-rm: #303d66;
+  --finger-rr: #46365e;
+  --finger-rp: #5a3250;
+  --finger-thumb: #3a3b44;
   color-scheme: dark;
 }
 

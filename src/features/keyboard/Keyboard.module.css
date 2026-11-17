@@ -1,0 +1,126 @@
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  user-select: none;
+}
+
+.row {
+  display: flex;
+  gap: 4px;
+}
+
+.key {
+  position: relative;
+  flex-basis: 0;
+  min-width: 0;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  color: var(--fg);
+  font: 13px var(--mono);
+  background: var(--surface);
+  transition:
+    transform 0.1s,
+    opacity 0.1s;
+}
+
+.key[data-finger='lp'] {
+  background: var(--finger-lp);
+}
+.key[data-finger='lr'] {
+  background: var(--finger-lr);
+}
+.key[data-finger='lm'] {
+  background: var(--finger-lm);
+}
+.key[data-finger='li'] {
+  background: var(--finger-li);
+}
+.key[data-finger='ri'] {
+  background: var(--finger-ri);
+}
+.key[data-finger='rm'] {
+  background: var(--finger-rm);
+}
+.key[data-finger='rr'] {
+  background: var(--finger-rr);
+}
+.key[data-finger='rp'] {
+  background: var(--finger-rp);
+}
+.key[data-finger='thumb'] {
+  background: var(--finger-thumb);
+}
+
+.key[data-dim='true'] {
+  opacity: 0.3;
+}
+
+.key[data-next='true'] {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  transform: scale(1.08);
+  z-index: 1;
+}
+
+.bump::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  width: 10px;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.hands {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 10px;
+}
+
+.hand {
+  display: flex;
+  gap: 4px;
+  align-items: flex-end;
+}
+
+.finger {
+  display: block;
+  width: 18px;
+  border: 1px solid var(--border-strong);
+  border-radius: 9px 9px 4px 4px;
+}
+
+.finger[data-active='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.lp,
+.rp {
+  height: 26px;
+}
+.lr,
+.rr {
+  height: 34px;
+}
+.lm,
+.rm {
+  height: 38px;
+}
+.li,
+.ri {
+  height: 34px;
+}
+.thumb {
+  height: 18px;
+}
