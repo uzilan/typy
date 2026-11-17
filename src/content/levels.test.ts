@@ -5,12 +5,24 @@ const TYPEABLE = /^[A-Za-zÅÄÖåäöÉéÜü0-9 .,;:!?"'()\-/&%=+*<>§@#]+$/
 
 const exercises = LEVELS.flatMap((l) => l.exercises)
 
-test('five levels numbered 1–5', () => {
-  expect(LEVELS.map((l) => l.number)).toEqual([1, 2, 3, 4, 5])
+test('levels numbered 0–5', () => {
+  expect(LEVELS.map((l) => l.number)).toEqual([0, 1, 2, 3, 4, 5])
 })
 
-test('every level has five exercises', () => {
-  for (const level of LEVELS) expect(level.exercises.length).toBe(5)
+test('levels 1–5 have five exercises, level 0 has eleven', () => {
+  for (const level of LEVELS.filter((l) => l.number >= 1))
+    expect(level.exercises.length).toBe(5)
+  expect(LEVELS[0]!.exercises.length).toBe(11)
+})
+
+test('level 0 exercises carry their allowed keys', () => {
+  expect(new Set(findExercise('tangenter-1')?.allowedKeys)).toEqual(
+    new Set(' asdfjklö'),
+  )
+  expect(findExercise('tangenter-1')?.title).toBe('Grundraden: a s d f j k l ö')
+  expect(findExercise('tangenter-4')?.title).toBe('Nya tangenter: r u')
+  expect(findExercise('tangenter-7')?.title).toBe('Nya tangenter: v c , .')
+  expect(findExercise('tangenter-11')?.title).toBe('Stor bokstav: ⇧')
 })
 
 test('every exercise has non-empty, typeable text', () => {
@@ -43,21 +55,21 @@ test('only the long-text level quotes literature', () => {
 const words = (text: string) => text.split(' ')
 
 test('drill levels are lowercase words without punctuation', () => {
-  for (const level of LEVELS.filter((l) => l.number <= 2)) {
+  for (const level of LEVELS.filter((l) => l.number >= 1 && l.number <= 2)) {
     for (const e of level.exercises)
       expect(e.text, e.id).toMatch(/^[a-zåäö ]+$/)
   }
 })
 
 test('level 1 uses only short words', () => {
-  for (const e of LEVELS[0]!.exercises) {
+  for (const e of LEVELS[1]!.exercises) {
     for (const w of words(e.text))
       expect(w.length, `${e.id}: ${w}`).toBeLessThanOrEqual(5)
   }
 })
 
 test('level 2 is rich in long words', () => {
-  for (const e of LEVELS[1]!.exercises) {
+  for (const e of LEVELS[2]!.exercises) {
     const long = words(e.text).filter((w) => w.length >= 8)
     expect(long.length, e.id).toBeGreaterThanOrEqual(8)
   }

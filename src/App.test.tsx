@@ -15,7 +15,7 @@ function renderAt(path: string) {
 
 test('ladder → exercise → results → next exercise / back to ladder', async () => {
   const user = userEvent.setup()
-  const [first, second] = LEVELS[0]!.exercises
+  const [first, second] = LEVELS[1]!.exercises
   renderAt('/')
 
   await user.click(
@@ -41,7 +41,7 @@ test('ladder → exercise → results → next exercise / back to ladder', async
 
 test('Försök igen returns to a fresh typing screen', async () => {
   const user = userEvent.setup()
-  const first = LEVELS[0]!.exercises[0]!
+  const first = LEVELS[1]!.exercises[0]!
   renderAt(`/ovning/${first.id}`)
 
   const input = await screen.findByLabelText('Skriv texten ovan här')
@@ -54,7 +54,7 @@ test('Försök igen returns to a fresh typing screen', async () => {
 })
 
 test('a locked exercise redirects to the ladder', async () => {
-  renderAt(`/ovning/${LEVELS[1]!.exercises[0]!.id}`)
+  renderAt(`/ovning/${LEVELS[2]!.exercises[0]!.id}`)
 
   expect(
     await screen.findByRole('heading', { name: 'Övningar' }),
@@ -63,7 +63,7 @@ test('a locked exercise redirects to the ladder', async () => {
 
 test('the menu leads to progress and back to the exercises', async () => {
   const user = userEvent.setup()
-  renderAt(`/ovning/${LEVELS[0]!.exercises[0]!.id}`)
+  renderAt(`/ovning/${LEVELS[1]!.exercises[0]!.id}`)
   const menu = await screen.findByRole('navigation', { name: 'Huvudmeny' })
 
   await user.click(within(menu).getByRole('link', { name: 'Mina framsteg' }))

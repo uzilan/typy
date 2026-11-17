@@ -7,7 +7,7 @@ import { AttemptStoreContext } from '../../storage/AttemptStoreContext'
 import { InMemoryAttemptStore } from '../../storage/InMemoryAttemptStore'
 import { ProgressScreen } from './ProgressScreen'
 
-const EX = LEVELS[0]!.exercises[0]!
+const EX = LEVELS[1]!.exercises[0]!
 
 function attempt(finishedAt: number, wpm: number, accuracy = 95): NewAttempt {
   return {

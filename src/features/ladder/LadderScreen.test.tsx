@@ -34,7 +34,7 @@ async function setup(attempts: NewAttempt[] = []) {
 }
 
 function levelSection(number: number) {
-  const level = LEVELS[number - 1]!
+  const level = LEVELS.find((l) => l.number === number)!
   return screen.getByRole('region', { name: level.name })
 }
 
@@ -47,7 +47,7 @@ test('level 1 is open with links to its exercises, the rest are locked', async (
   expect(links).toHaveLength(5)
   expect(links[0]).toHaveAttribute(
     'href',
-    `/ovning/${LEVELS[0]!.exercises[0]!.id}`,
+    `/ovning/${LEVELS[1]!.exercises[0]!.id}`,
   )
 
   const l2 = levelSection(2)
@@ -59,7 +59,7 @@ test('level 1 is open with links to its exercises, the rest are locked', async (
 })
 
 test('shows best result per exercise and unlocks the next level', async () => {
-  const [a, b, c, d, e] = LEVELS[0]!.exercises
+  const [a, b, c, d, e] = LEVELS[1]!.exercises
   await setup([
     attempt(a!.id, 20, 90),
     attempt(a!.id, 34, 98),

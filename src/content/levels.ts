@@ -1,4 +1,5 @@
 import { plainSentences, punctuatedSentences } from './generate'
+import { LESSONS, allowedChars, lessonText } from './beginner/lessons'
 import { normalizeText } from './normalizeText'
 import { PASSAGES, type Passage, type Source } from './passages'
 
@@ -8,6 +9,8 @@ export interface Exercise {
   title: string
   text: string
   source?: Source
+  /** Level 0 only: the characters the learner may be asked to type. */
+  allowedKeys?: string
 }
 
 export interface Level {
@@ -82,7 +85,23 @@ function passage(id: string): Passage {
   return p
 }
 
-export const LEVELS: Level[] = SPECS.map((spec) => ({
+const LEVEL_0: Level = {
+  number: 0,
+  name: 'Lär dig tangenterna',
+  description:
+    'Hitta rätt finger för varje tangent, några i taget. Orden kommer från Kelly-listan (Språkbanken, CC BY 4.0).',
+  exercises: LESSONS.map((lesson) => ({
+    id: `tangenter-${lesson.number}`,
+    levelNumber: 0,
+    title: `${lesson.name ?? 'Nya tangenter'}: ${
+      lesson.newKeys === '' ? '⇧' : [...lesson.newKeys].join(' ')
+    }`,
+    text: lessonText(lesson.number),
+    allowedKeys: allowedChars(lesson.number),
+  })),
+}
+
+export const LEVELS: Level[] = [LEVEL_0, ...SPECS.map((spec) => ({
   number: spec.number,
   name: spec.name,
   description: spec.description,
@@ -96,7 +115,7 @@ export const LEVELS: Level[] = SPECS.map((spec) => ({
       source: p.source,
     }
   }),
-}))
+}))]
 
 /** "Nivå 1 · Korta ord" */
 export function levelLabel(levelNumber: number): string {

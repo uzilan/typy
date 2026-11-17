@@ -39,6 +39,16 @@ function tried(exerciseId: string, wpm = 20, accuracy = 90): Attempt {
 }
 
 describe('isUnlocked', () => {
+  test('level 0 is always open and never blocks level 1 or 2', () => {
+    const withZero: Level[] = [
+      { number: 0, name: 'Noll', description: '', exercises: [ex('z', 0)] },
+      ...LEVELS,
+    ]
+    expect(isUnlocked(0, withZero, [])).toBe(true)
+    expect(isUnlocked(1, withZero, [])).toBe(true)
+    expect(isUnlocked(2, withZero, [tried('a'), tried('b')])).toBe(true)
+  })
+
   test('level 1 is always open', () => {
     expect(isUnlocked(1, LEVELS, [])).toBe(true)
   })

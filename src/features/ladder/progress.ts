@@ -26,7 +26,7 @@ function isComplete(level: Level, tried: Set<string>): boolean {
   return level.exercises.every((e) => tried.has(e.id))
 }
 
-/** Level 1 is always open; level N opens when every level before it is complete. */
+/** Levels 0 and 1 are always open; level N opens when every level 1..N-1 is complete (level 0 never counts). */
 export function isUnlocked(
   levelNumber: number,
   levels: Level[],
@@ -34,7 +34,7 @@ export function isUnlocked(
 ): boolean {
   const tried = triedIds(attempts)
   return levels
-    .filter((l) => l.number < levelNumber)
+    .filter((l) => l.number >= 1 && l.number < levelNumber)
     .every((l) => isComplete(l, tried))
 }
 
