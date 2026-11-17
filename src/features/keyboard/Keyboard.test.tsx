@@ -43,6 +43,13 @@ describe('Keyboard', () => {
     expect(key(container, 'Space').getAttribute('data-dim')).toBe('false')
   })
 
+  test('never dims Backspace', () => {
+    const { container } = render(
+      <Keyboard nextChar={undefined} allowedKeys=" asdfjklö" />,
+    )
+    expect(key(container, 'Backspace').getAttribute('data-dim')).toBe('false')
+  })
+
   test('dims nothing without allowedKeys', () => {
     const { container } = render(
       <Keyboard nextChar={undefined} allowedKeys={undefined} />,

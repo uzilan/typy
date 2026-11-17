@@ -17,7 +17,7 @@ export function Keyboard({ nextChar, allowedKeys }: KeyboardProps) {
   const neededKeys =
     allowedKeys === undefined
       ? undefined
-      : new Set([...allowedKeys].flatMap((c) => keysFor(c)))
+      : new Set(['Backspace', ...[...allowedKeys].flatMap((c) => keysFor(c))])
 
   return (
     <div className={styles.keyboard} aria-hidden="true">
