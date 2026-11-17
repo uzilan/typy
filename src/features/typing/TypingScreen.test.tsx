@@ -5,6 +5,7 @@ import { formatDuration } from './formatDuration'
 import { AttemptStoreContext } from '../../storage/AttemptStoreContext'
 import { InMemoryAttemptStore } from '../../storage/InMemoryAttemptStore'
 import { InMemorySettingsStore } from '../../storage/InMemorySettingsStore'
+import { SettingsProvider } from '../../storage/SettingsProvider'
 import { SettingsStoreContext } from '../../storage/SettingsStoreContext'
 
 function setup(
@@ -17,16 +18,18 @@ function setup(
   const add = vi.spyOn(store, 'add')
   render(
     <SettingsStoreContext value={settingsStore}>
-      <AttemptStoreContext value={store}>
-        <TypingScreen
-          exerciseId="raven-vid-sjon"
-          level="Nivå 3 · Meningar"
-          title="Räven vid sjön"
-          text={text}
-          levelNumber={levelNumber}
-          onShowResults={onShowResults}
-        />
-      </AttemptStoreContext>
+      <SettingsProvider>
+        <AttemptStoreContext value={store}>
+          <TypingScreen
+            exerciseId="raven-vid-sjon"
+            level="Nivå 3 · Meningar"
+            title="Räven vid sjön"
+            text={text}
+            levelNumber={levelNumber}
+            onShowResults={onShowResults}
+          />
+        </AttemptStoreContext>
+      </SettingsProvider>
     </SettingsStoreContext>,
   )
   const input = screen.getByLabelText('Skriv texten ovan här')

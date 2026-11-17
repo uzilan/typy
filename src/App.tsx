@@ -6,6 +6,7 @@ import { NotFound } from './features/routes/NotFound'
 import { ResultsRoute } from './features/routes/ResultsRoute'
 import { AttemptStoreContext } from './storage/AttemptStoreContext'
 import type { AttemptStore } from './storage/AttemptStore'
+import { SettingsProvider } from './storage/SettingsProvider'
 import { SettingsStoreContext } from './storage/SettingsStoreContext'
 import type { SettingsStore } from './storage/SettingsStore'
 import { ThemeToggle } from './theme/ThemeToggle'
@@ -24,42 +25,44 @@ function App({ store, settings, onSignOut }: Props) {
   return (
     <AttemptStoreContext value={store}>
       <SettingsStoreContext value={settings}>
-        <div className={styles.page}>
-          <header className={styles.header}>
-            <nav className={styles.nav} aria-label="Huvudmeny">
-              <NavLink to="/" end className={styles.navLink}>
-                Övningar
-              </NavLink>
-              <NavLink to="/framsteg" className={styles.navLink}>
-                Mina framsteg
-              </NavLink>
-            </nav>
-            <div className={styles.actions}>
-              {onSignOut && (
-                <button
-                  type="button"
-                  className={styles.signOut}
-                  onClick={onSignOut}
-                >
-                  Logga ut
-                </button>
-              )}
-              <ThemeToggle />
-            </div>
-          </header>
-          <main>
-            <Routes>
-              <Route path="/" element={<LadderScreen />} />
-              <Route path="/framsteg" element={<ProgressScreen />} />
-              <Route path="/ovning/:id" element={<ExerciseRoute />} />
-              <Route
-                path="/ovning/:id/resultat/:attemptId"
-                element={<ResultsRoute />}
-              />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </main>
-        </div>
+        <SettingsProvider>
+          <div className={styles.page}>
+            <header className={styles.header}>
+              <nav className={styles.nav} aria-label="Huvudmeny">
+                <NavLink to="/" end className={styles.navLink}>
+                  Övningar
+                </NavLink>
+                <NavLink to="/framsteg" className={styles.navLink}>
+                  Mina framsteg
+                </NavLink>
+              </nav>
+              <div className={styles.actions}>
+                {onSignOut && (
+                  <button
+                    type="button"
+                    className={styles.signOut}
+                    onClick={onSignOut}
+                  >
+                    Logga ut
+                  </button>
+                )}
+                <ThemeToggle />
+              </div>
+            </header>
+            <main>
+              <Routes>
+                <Route path="/" element={<LadderScreen />} />
+                <Route path="/framsteg" element={<ProgressScreen />} />
+                <Route path="/ovning/:id" element={<ExerciseRoute />} />
+                <Route
+                  path="/ovning/:id/resultat/:attemptId"
+                  element={<ResultsRoute />}
+                />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </main>
+          </div>
+        </SettingsProvider>
       </SettingsStoreContext>
     </AttemptStoreContext>
   )

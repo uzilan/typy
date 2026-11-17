@@ -6,6 +6,7 @@ import type { NewAttempt } from '../../storage/attempt'
 import { AttemptStoreContext } from '../../storage/AttemptStoreContext'
 import { InMemoryAttemptStore } from '../../storage/InMemoryAttemptStore'
 import { InMemorySettingsStore } from '../../storage/InMemorySettingsStore'
+import { SettingsProvider } from '../../storage/SettingsProvider'
 import { SettingsStoreContext } from '../../storage/SettingsStoreContext'
 import { LadderScreen } from './LadderScreen'
 
@@ -34,9 +35,11 @@ async function setup(
   render(
     <AttemptStoreContext value={store}>
       <SettingsStoreContext value={settingsStore}>
-        <MemoryRouter>
-          <LadderScreen />
-        </MemoryRouter>
+        <SettingsProvider>
+          <MemoryRouter>
+            <LadderScreen />
+          </MemoryRouter>
+        </SettingsProvider>
       </SettingsStoreContext>
     </AttemptStoreContext>,
   )
