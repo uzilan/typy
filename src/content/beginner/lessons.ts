@@ -22,24 +22,154 @@ export const LESSONS: readonly Lesson[] = [
 
 // Words never used in lesson texts: politically charged, violent, sexual, drug-related or otherwise sensitive.
 export const EXCLUDED_WORDS: ReadonlySet<string> = new Set([
-  'regering', 'ligga', 'lik', 'politisk', 'politik', 'parti', 'krig', 'riksdag', 'politiker',
-  'kristen', 'död', 'brott', 'religion', 'jude', 'gud', 'sjuk', 'våld', 'president', 'muslim',
-  'döda', 'kris', 'döma', 'religiös', 'vapen', 'sjukdom', 'skjuta', 'islam', 'judisk',
-  'invandrare', 'muslimsk', 'sexuell', 'världskrig', 'fängelse', 'sex', 'sexa', 'sextio', 'sexton',
-  'piratparti', 'vänsterparti', 'centerparti', 'politiskt', 'folkparti', 'miljöparti',
-  'kristendom', 'flykting', 'helvete', 'terrorism', 'dum', 'rasism', 'alkohol', 'invandring',
-  'republik', 'kommunistisk', 'kommunist', 'hata', 'terrorist', 'hat', 'mörda', 'homosexuell',
-  'brottslighet', 'nazist', 'kommunism', 'våldsam', 'extrem', 'extremt', 'drog', 'öl', 'våldtäkt',
-  'idiot', 'partiledare', 'gudomlig', 'finanskris', 'bomb', 'islamisk', 'slav', 'inbördeskrig',
-  'abort', 'mördare', 'folkmord', 'illegal', 'naken', 'cancer', 'nazism', 'skita', 'kärnvapen',
-  'tortyr', 'rasist', 'katolik', 'dödsstraff', 'stöld', 'fan', 'dödsfall', 'självmord', 'dumt',
-  'sexualitet', 'brottsling', 'islamist', 'presidentval', 'dumhet', 'dödlig', 'riksdagsval',
-  'marxism', 'sprit', 'fascism', 'gudstjänst', 'judendom', 'slaveri', 'krigare', 'exploatering',
-  'nazistisk', 'explodera', 'bomba', 'våldta', 'islamistisk', 'rumpa', 'förövare', 'rån',
-  'riksdagsman', 'hora', 'förbjuden', 'fascistisk', 'explosion', 'satan', 'extremist', 'bombning',
-  'vapenvila', 'brottas', 'porr', 'miljöpolitik', 'arbetarparti', 'marxist', 'brottslig',
-  'fascist', 'berusad', 'exploatera', 'terror', 'gudinna', 'kriga', 'sexig', 'gudom', 'odödlig',
-  'explosiv', 'alkoholism', 'slavisk', 'narkoman', 'terroristisk', 'fördöma', 'dö',
+  'regering',
+  'ligga',
+  'lik',
+  'politisk',
+  'politik',
+  'parti',
+  'krig',
+  'riksdag',
+  'politiker',
+  'kristen',
+  'död',
+  'brott',
+  'religion',
+  'jude',
+  'gud',
+  'sjuk',
+  'våld',
+  'president',
+  'muslim',
+  'döda',
+  'kris',
+  'döma',
+  'religiös',
+  'vapen',
+  'sjukdom',
+  'skjuta',
+  'islam',
+  'judisk',
+  'invandrare',
+  'muslimsk',
+  'sexuell',
+  'världskrig',
+  'fängelse',
+  'sex',
+  'sexa',
+  'sextio',
+  'sexton',
+  'piratparti',
+  'vänsterparti',
+  'centerparti',
+  'politiskt',
+  'folkparti',
+  'miljöparti',
+  'kristendom',
+  'flykting',
+  'helvete',
+  'terrorism',
+  'dum',
+  'rasism',
+  'alkohol',
+  'invandring',
+  'republik',
+  'kommunistisk',
+  'kommunist',
+  'hata',
+  'terrorist',
+  'hat',
+  'mörda',
+  'homosexuell',
+  'brottslighet',
+  'nazist',
+  'kommunism',
+  'våldsam',
+  'extrem',
+  'extremt',
+  'drog',
+  'öl',
+  'våldtäkt',
+  'idiot',
+  'partiledare',
+  'gudomlig',
+  'finanskris',
+  'bomb',
+  'islamisk',
+  'slav',
+  'inbördeskrig',
+  'abort',
+  'mördare',
+  'folkmord',
+  'illegal',
+  'naken',
+  'cancer',
+  'nazism',
+  'skita',
+  'kärnvapen',
+  'tortyr',
+  'rasist',
+  'katolik',
+  'dödsstraff',
+  'stöld',
+  'fan',
+  'dödsfall',
+  'självmord',
+  'dumt',
+  'sexualitet',
+  'brottsling',
+  'islamist',
+  'presidentval',
+  'dumhet',
+  'dödlig',
+  'riksdagsval',
+  'marxism',
+  'sprit',
+  'fascism',
+  'gudstjänst',
+  'judendom',
+  'slaveri',
+  'krigare',
+  'exploatering',
+  'nazistisk',
+  'explodera',
+  'bomba',
+  'våldta',
+  'islamistisk',
+  'rumpa',
+  'förövare',
+  'rån',
+  'riksdagsman',
+  'hora',
+  'förbjuden',
+  'fascistisk',
+  'explosion',
+  'satan',
+  'extremist',
+  'bombning',
+  'vapenvila',
+  'brottas',
+  'porr',
+  'miljöpolitik',
+  'arbetarparti',
+  'marxist',
+  'brottslig',
+  'fascist',
+  'berusad',
+  'exploatera',
+  'terror',
+  'gudinna',
+  'kriga',
+  'sexig',
+  'gudom',
+  'odödlig',
+  'explosiv',
+  'alkoholism',
+  'slavisk',
+  'narkoman',
+  'terroristisk',
+  'fördöma',
+  'dö',
 ])
 
 const TARGET_LENGTH = 120
@@ -53,7 +183,10 @@ function lessonsUpTo(lessonNumber: number): readonly Lesson[] {
 }
 
 export function allowedChars(lessonNumber: number): string {
-  let chars = lessonsUpTo(lessonNumber).map((l) => l.newKeys).join('') + ' '
+  let chars =
+    lessonsUpTo(lessonNumber)
+      .map((l) => l.newKeys)
+      .join('') + ' '
   if (lessonNumber >= FIRST_PUNCTUATION_LESSON) chars += ',.'
   if (lessonNumber >= CAPITALS_LESSON) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ'
   return chars
@@ -95,12 +228,30 @@ function drill(newKeys: string, lessonNumber: number): string[] {
   return parts
 }
 
-function pickWords(lessonNumber: number, newKeys: string, startLength: number, random: () => number): string[] {
-  const letters = new Set([...allowedChars(lessonNumber)].filter((c) => LOWERCASE.test(c)))
-  const candidates = WORDS.filter((w) => w.length > 1 && !EXCLUDED_WORDS.has(w) && [...w].every((c) => letters.has(c)))
+function pickWords(
+  lessonNumber: number,
+  newKeys: string,
+  startLength: number,
+  random: () => number,
+): string[] {
+  const letters = new Set(
+    [...allowedChars(lessonNumber)].filter((c) => LOWERCASE.test(c)),
+  )
+  const candidates = WORDS.filter(
+    (w) =>
+      w.length > 1 &&
+      !EXCLUDED_WORDS.has(w) &&
+      [...w].every((c) => letters.has(c)),
+  )
   const hasNew = (w: string) => [...newKeys].some((k) => w.includes(k))
-  const ordered = [...candidates.filter(hasNew), ...candidates.filter((w) => !hasNew(w))]
-  const mixed = [...shuffle(ordered.slice(0, POOL_SIZE), random), ...ordered.slice(POOL_SIZE)]
+  const ordered = [
+    ...candidates.filter(hasNew),
+    ...candidates.filter((w) => !hasNew(w)),
+  ]
+  const mixed = [
+    ...shuffle(ordered.slice(0, POOL_SIZE), random),
+    ...ordered.slice(POOL_SIZE),
+  ]
 
   const picked: string[] = []
   let length = startLength
@@ -133,7 +284,9 @@ function punctuate(words: string[], random: () => number): string[] {
 function capitalise(words: string[], random: () => number): string[] {
   return words.map((w, i) => {
     const startsSentence = i === 0 || words[i - 1]?.endsWith('.')
-    return startsSentence || random() < 0.2 ? w.charAt(0).toUpperCase() + w.slice(1) : w
+    return startsSentence || random() < 0.2
+      ? w.charAt(0).toUpperCase() + w.slice(1)
+      : w
   })
 }
 
@@ -142,8 +295,10 @@ export function lessonText(lessonNumber: number): string {
   if (!lesson) throw new Error(`Unknown lesson ${lessonNumber}`)
   const random = mulberry32(lessonNumber)
 
-  const drillParts = lessonNumber === CAPITALS_LESSON ? [] : drill(lesson.newKeys, lessonNumber)
-  const drillLength = drillParts.join(' ').length + (drillParts.length > 0 ? 1 : 0)
+  const drillParts =
+    lessonNumber === CAPITALS_LESSON ? [] : drill(lesson.newKeys, lessonNumber)
+  const drillLength =
+    drillParts.join(' ').length + (drillParts.length > 0 ? 1 : 0)
   let words = pickWords(lessonNumber, lesson.newKeys, drillLength, random)
   if (lessonNumber >= FIRST_PUNCTUATION_LESSON) words = punctuate(words, random)
   if (lessonNumber === CAPITALS_LESSON) words = capitalise(words, random)

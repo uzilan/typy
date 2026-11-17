@@ -2,17 +2,29 @@ import { allowedChars, EXCLUDED_WORDS, LESSONS, lessonText } from './lessons'
 
 test('eleven lessons in the agreed order', () => {
   expect(LESSONS.map((l) => l.newKeys)).toEqual([
-    'asdfjklö', 'ghä', 'ei', 'ru', 'to', 'nm', 'vc,.', 'på', 'by', 'wxzq', '',
+    'asdfjklö',
+    'ghä',
+    'ei',
+    'ru',
+    'to',
+    'nm',
+    'vc,.',
+    'på',
+    'by',
+    'wxzq',
+    '',
   ])
 })
 test('every lesson only uses allowed characters', () => {
   for (const l of LESSONS) {
     const allowed = new Set(allowedChars(l.number))
-    for (const ch of lessonText(l.number)) expect(allowed.has(ch), `${l.number}: ${ch}`).toBe(true)
+    for (const ch of lessonText(l.number))
+      expect(allowed.has(ch), `${l.number}: ${ch}`).toBe(true)
   }
 })
 test('every lesson practises each of its new keys', () => {
-  for (const l of LESSONS) for (const k of l.newKeys) expect(lessonText(l.number)).toContain(k)
+  for (const l of LESSONS)
+    for (const k of l.newKeys) expect(lessonText(l.number)).toContain(k)
 })
 test('lesson 11 has capital letters', () => {
   expect(lessonText(11)).toMatch(/[A-ZÅÄÖ]/)
@@ -30,11 +42,18 @@ test('deterministic', () => {
   expect(lessonText(3)).toBe(lessonText(3))
 })
 test('no double or edge spaces', () => {
-  for (const l of LESSONS) expect(lessonText(l.number)).toBe(lessonText(l.number).trim().replace(/ +/g, ' '))
+  for (const l of LESSONS)
+    expect(lessonText(l.number)).toBe(
+      lessonText(l.number).trim().replace(/ +/g, ' '),
+    )
 })
 test('no lesson contains an excluded word', () => {
   for (const l of LESSONS) {
-    const words = lessonText(l.number).toLowerCase().replace(/[,.]/g, '').split(' ')
-    for (const w of words) expect(EXCLUDED_WORDS.has(w), `${l.number}: ${w}`).toBe(false)
+    const words = lessonText(l.number)
+      .toLowerCase()
+      .replace(/[,.]/g, '')
+      .split(' ')
+    for (const w of words)
+      expect(EXCLUDED_WORDS.has(w), `${l.number}: ${w}`).toBe(false)
   }
 })

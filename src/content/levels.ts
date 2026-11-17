@@ -101,21 +101,24 @@ const LEVEL_0: Level = {
   })),
 }
 
-export const LEVELS: Level[] = [LEVEL_0, ...SPECS.map((spec) => ({
-  number: spec.number,
-  name: spec.name,
-  description: spec.description,
-  exercises: spec.passageIds.map((id) => {
-    const p = passage(id)
-    return {
-      id: `${spec.slug}-${p.id}`,
-      levelNumber: spec.number,
-      title: p.title,
-      text: spec.build(normalizeText(p.text)),
-      source: p.source,
-    }
-  }),
-}))]
+export const LEVELS: Level[] = [
+  LEVEL_0,
+  ...SPECS.map((spec) => ({
+    number: spec.number,
+    name: spec.name,
+    description: spec.description,
+    exercises: spec.passageIds.map((id) => {
+      const p = passage(id)
+      return {
+        id: `${spec.slug}-${p.id}`,
+        levelNumber: spec.number,
+        title: p.title,
+        text: spec.build(normalizeText(p.text)),
+        source: p.source,
+      }
+    }),
+  })),
+]
 
 /** "Nivå 1 · Korta ord" */
 export function levelLabel(levelNumber: number): string {
