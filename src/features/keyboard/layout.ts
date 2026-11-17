@@ -55,6 +55,9 @@ const SPECIAL_WIDTHS: Record<string, number> = {
   ShiftLeft: 1.25,
   ShiftRight: 2.75,
   Space: 6,
+  // Row ends, widened so every row is 15 units wide.
+  '¨': 2.5,
+  "'": 2.25,
 }
 
 function row(ids: string[]): KeyDef[] {

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import { LEVELS } from '../../content/levels'
-import { fingerOf, keysFor } from './layout'
+import { fingerOf, keysFor, ROWS } from './layout'
 
 describe('keysFor', () => {
   test('maps plain keys, space and shifted characters', () => {
@@ -40,4 +40,11 @@ describe('fingerOf', () => {
     expect(fingerOf('Space')).toBe('thumb')
     expect(fingerOf('nope')).toBeUndefined()
   })
+})
+
+test('all rows except the space row are equally wide', () => {
+  const widths = ROWS.slice(0, -1).map((r) =>
+    r.reduce((sum, k) => sum + (k.width ?? 1), 0),
+  )
+  expect(new Set(widths).size).toBe(1)
 })
