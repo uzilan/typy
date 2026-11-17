@@ -15,9 +15,15 @@ export function useSettings(): {
 
   useEffect(() => {
     let active = true
-    void store.get().then((loaded) => {
-      if (active) setSettings(loaded)
-    })
+    store
+      .get()
+      .then((loaded) => {
+        if (active) setSettings(loaded)
+      })
+      .catch((err: unknown) => {
+        console.error('Could not load settings', err)
+        if (active) setSettings({ skippedLevel0: false })
+      })
     return () => {
       active = false
     }

@@ -161,6 +161,15 @@ describe('user settings (users/{uid})', () => {
     await assertFails(setDoc(aliceSettings(anon()), { skippedLevel0: true }))
   })
 
+  test.each([
+    ['an unknown field', { admin: true }],
+    ['skippedLevel0 as a string', { skippedLevel0: 'yes' }],
+    ['showKeyboard as a string', { showKeyboard: 'no' }],
+  ])('rejects an update with %s', async (_, data) => {
+    await seedAliceSettings()
+    await assertFails(updateDoc(aliceSettings(alice()), data))
+  })
+
   test('owner cannot delete the settings', async () => {
     await seedAliceSettings()
     await assertFails(deleteDoc(aliceSettings(alice())))
