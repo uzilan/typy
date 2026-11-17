@@ -4,11 +4,15 @@ import { MemoryRouter } from 'react-router'
 import App from './App'
 import { LEVELS } from './content/levels'
 import { InMemoryAttemptStore } from './storage/InMemoryAttemptStore'
+import { InMemorySettingsStore } from './storage/InMemorySettingsStore'
 
 function renderAt(path: string) {
   render(
     <MemoryRouter initialEntries={[path]}>
-      <App store={new InMemoryAttemptStore()} />
+      <App
+        store={new InMemoryAttemptStore()}
+        settings={new InMemorySettingsStore()}
+      />
     </MemoryRouter>,
   )
 }
@@ -93,7 +97,11 @@ test('Logga ut signs out', async () => {
   const onSignOut = vi.fn()
   render(
     <MemoryRouter>
-      <App store={new InMemoryAttemptStore()} onSignOut={onSignOut} />
+      <App
+        store={new InMemoryAttemptStore()}
+        settings={new InMemorySettingsStore()}
+        onSignOut={onSignOut}
+      />
     </MemoryRouter>,
   )
 
