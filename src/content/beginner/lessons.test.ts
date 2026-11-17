@@ -1,4 +1,4 @@
-import { allowedChars, LESSONS, lessonText } from './lessons'
+import { allowedChars, EXCLUDED_WORDS, LESSONS, lessonText } from './lessons'
 
 test('eleven lessons in the agreed order', () => {
   expect(LESSONS.map((l) => l.newKeys)).toEqual([
@@ -31,4 +31,10 @@ test('deterministic', () => {
 })
 test('no double or edge spaces', () => {
   for (const l of LESSONS) expect(lessonText(l.number)).toBe(lessonText(l.number).trim().replace(/ +/g, ' '))
+})
+test('no lesson contains an excluded word', () => {
+  for (const l of LESSONS) {
+    const words = lessonText(l.number).toLowerCase().replace(/[,.]/g, '').split(' ')
+    for (const w of words) expect(EXCLUDED_WORDS.has(w), `${l.number}: ${w}`).toBe(false)
+  }
 })

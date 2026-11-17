@@ -20,6 +20,28 @@ export const LESSONS: readonly Lesson[] = [
   { number: 11, name: 'Stor bokstav', newKeys: '' },
 ]
 
+// Words never used in lesson texts: politically charged, violent, sexual, drug-related or otherwise sensitive.
+export const EXCLUDED_WORDS: ReadonlySet<string> = new Set([
+  'regering', 'ligga', 'lik', 'politisk', 'politik', 'parti', 'krig', 'riksdag', 'politiker',
+  'kristen', 'död', 'brott', 'religion', 'jude', 'gud', 'sjuk', 'våld', 'president', 'muslim',
+  'döda', 'kris', 'döma', 'religiös', 'vapen', 'sjukdom', 'skjuta', 'islam', 'judisk',
+  'invandrare', 'muslimsk', 'sexuell', 'världskrig', 'fängelse', 'sex', 'sexa', 'sextio', 'sexton',
+  'piratparti', 'vänsterparti', 'centerparti', 'politiskt', 'folkparti', 'miljöparti',
+  'kristendom', 'flykting', 'helvete', 'terrorism', 'dum', 'rasism', 'alkohol', 'invandring',
+  'republik', 'kommunistisk', 'kommunist', 'hata', 'terrorist', 'hat', 'mörda', 'homosexuell',
+  'brottslighet', 'nazist', 'kommunism', 'våldsam', 'extrem', 'extremt', 'drog', 'öl', 'våldtäkt',
+  'idiot', 'partiledare', 'gudomlig', 'finanskris', 'bomb', 'islamisk', 'slav', 'inbördeskrig',
+  'abort', 'mördare', 'folkmord', 'illegal', 'naken', 'cancer', 'nazism', 'skita', 'kärnvapen',
+  'tortyr', 'rasist', 'katolik', 'dödsstraff', 'stöld', 'fan', 'dödsfall', 'självmord', 'dumt',
+  'sexualitet', 'brottsling', 'islamist', 'presidentval', 'dumhet', 'dödlig', 'riksdagsval',
+  'marxism', 'sprit', 'fascism', 'gudstjänst', 'judendom', 'slaveri', 'krigare', 'exploatering',
+  'nazistisk', 'explodera', 'bomba', 'våldta', 'islamistisk', 'rumpa', 'förövare', 'rån',
+  'riksdagsman', 'hora', 'förbjuden', 'fascistisk', 'explosion', 'satan', 'extremist', 'bombning',
+  'vapenvila', 'brottas', 'porr', 'miljöpolitik', 'arbetarparti', 'marxist', 'brottslig',
+  'fascist', 'berusad', 'exploatera', 'terror', 'gudinna', 'kriga', 'sexig', 'gudom', 'odödlig',
+  'explosiv', 'alkoholism', 'slavisk', 'narkoman', 'terroristisk', 'fördöma', 'dö',
+])
+
 const TARGET_LENGTH = 120
 const POOL_SIZE = 40
 const CAPITALS_LESSON = 11
@@ -75,7 +97,7 @@ function drill(newKeys: string, lessonNumber: number): string[] {
 
 function pickWords(lessonNumber: number, newKeys: string, startLength: number, random: () => number): string[] {
   const letters = new Set([...allowedChars(lessonNumber)].filter((c) => LOWERCASE.test(c)))
-  const candidates = WORDS.filter((w) => w.length > 1 && [...w].every((c) => letters.has(c)))
+  const candidates = WORDS.filter((w) => w.length > 1 && !EXCLUDED_WORDS.has(w) && [...w].every((c) => letters.has(c)))
   const hasNew = (w: string) => [...newKeys].some((k) => w.includes(k))
   const ordered = [...candidates.filter(hasNew), ...candidates.filter((w) => !hasNew(w))]
   const mixed = [...shuffle(ordered.slice(0, POOL_SIZE), random), ...ordered.slice(POOL_SIZE)]
