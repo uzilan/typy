@@ -31,7 +31,7 @@ Mockups: <https://claude.ai/artifact/9tvMBF4B979R6gRRdRyEUP>
 
 - **Levels** — level 0 is key-based: 11 lessons introducing the keys in order (home row → … → capitals), text generated from the Kelly word list, skippable ("Jag kan redan skriva"). Levels 1–5 stay text-based: short words → longer words → sentences → punctuation & numbers → longer texts.
 - **On-screen keyboard** — style C: keys coloured by finger, next key highlighted, untaught keys dimmed, hands showing which finger to use. "Tangentbord" switch top right of the typing screen; on by default in level 0, off elsewhere, remembered per user across all levels.
-- **Exercise picker** — variant B ("Nivåstege"): vertical ladder of levels, each with status (Klar / Pågår / Låst) and a list of exercises showing best WPM + accuracy. **Levels unlock sequentially**: a level opens when every exercise in the previous one has been done at least once.
+- **Exercise picker** — variant B ("Nivåstege"): vertical ladder of levels, each with status (Klar / Pågår / Låst) and a list of exercises showing best WPM + accuracy. **Levels unlock sequentially**: a level opens when every exercise in the previous one has been done at least once. Level 1 also opens when level 0 is complete or skipped, or when any attempt exists in level 1 or above; level 0 never blocks levels 2+.
 - **Progress overview** — variant A ("Trend"): summary tiles (best WPM, avg WPM, avg accuracy, practice days), two separate line charts over time (WPM, accuracy) with hover values, range toggle (last 14 days / all).
 - **Navigation flow** — Övningar (ladder) ⇄ Mina framsteg via top nav; ladder → typing → results → "Försök igen" / "Nästa övning" / "Alla övningar". Light/dark toggle lives in the app header (built in phase 0).
 
