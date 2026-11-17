@@ -1,5 +1,6 @@
-import { render, screen, within } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
+import userEvent from '@testing-library/user-event'
 import { LEVELS } from '../../content/levels'
 import type { NewAttempt } from '../../storage/attempt'
 import { AttemptStoreContext } from '../../storage/AttemptStoreContext'
@@ -40,6 +41,7 @@ async function setup(
     </AttemptStoreContext>,
   )
   await screen.findByRole('heading', { name: 'Övningar' })
+  return settingsStore
 }
 
 function levelSection(number: number) {
@@ -95,4 +97,43 @@ test('shows best result per exercise and unlocks the next level', async () => {
   expect(within(l2).getByText(/Pågår · 0\/5/)).toBeInTheDocument()
   expect(within(l2).getAllByRole('link')).toHaveLength(5)
   expect(within(l2).getAllByText('Inte påbörjad')).toHaveLength(5)
+})
+
+test('level 0 lists its exercises and offers to skip while level 1 is locked', async () => {
+  await setup()
+
+  const l0 = levelSection(0)
+  expect(within(l0).getAllByRole('link')).toHaveLength(11)
+  expect(
+    within(l0).getByText('Grundraden: a s d f j k l ö'),
+  ).toBeInTheDocument()
+  expect(
+    within(l0).getByRole('button', { name: 'Jag kan redan skriva' }),
+  ).toBeInTheDocument()
+  expect(within(levelSection(1)).getByText('Låst')).toBeInTheDocument()
+})
+
+test('skipping level 0 unlocks level 1 and hides the button', async () => {
+  const settingsStore = await setup()
+
+  await userEvent.click(
+    screen.getByRole('button', { name: 'Jag kan redan skriva' }),
+  )
+
+  expect(
+    screen.queryByRole('button', { name: 'Jag kan redan skriva' }),
+  ).not.toBeInTheDocument()
+  expect(within(levelSection(1)).queryByText('Låst')).not.toBeInTheDocument()
+  expect(within(levelSection(0)).getAllByRole('link')).toHaveLength(11)
+  await waitFor(async () =>
+    expect(await settingsStore.get()).toMatchObject({ skippedLevel0: true }),
+  )
+})
+
+test('no skip button once level 1 has attempts', async () => {
+  await setup([attempt(LEVELS[1]!.exercises[0]!.id)])
+
+  expect(
+    screen.queryByRole('button', { name: 'Jag kan redan skriva' }),
+  ).not.toBeInTheDocument()
 })

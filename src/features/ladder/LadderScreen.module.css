@@ -168,3 +168,26 @@
   border: 1px dashed var(--border-strong);
   border-radius: 12px;
 }
+
+.skip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.skipButton {
+  font: inherit;
+  font-weight: 500;
+  color: var(--fg);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.skipButton:hover {
+  background: var(--highlight);
+}

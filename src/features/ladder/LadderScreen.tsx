@@ -19,7 +19,7 @@ const DOT_CLASS: Record<LevelStatus, string | undefined> = {
 
 export function LadderScreen() {
   const attempts = useAllAttempts()
-  const { settings } = useSettings()
+  const { settings, update } = useSettings()
   if (attempts === null || settings === null)
     return <p className={styles.muted}>Laddar…</p>
 
@@ -93,6 +93,21 @@ export function LadderScreen() {
                       </li>
                     ))}
                   </ul>
+                )}
+
+                {level.number === 0 && progress[1]?.status === 'locked' && (
+                  <div className={styles.skip}>
+                    <button
+                      type="button"
+                      className={styles.skipButton}
+                      onClick={() => update({ skippedLevel0: true })}
+                    >
+                      Jag kan redan skriva
+                    </button>
+                    <span className={styles.muted}>
+                      Låser upp nivå 1. Nivå 0 finns kvar att öva på.
+                    </span>
+                  </div>
                 )}
               </section>
             </li>
