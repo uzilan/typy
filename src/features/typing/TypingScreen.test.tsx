@@ -232,3 +232,20 @@ test('toggling keeps focus in the input', async () => {
 
   expect(input).toHaveFocus()
 })
+
+test('the keyboard hides when the exercise is finished', async () => {
+  const { user, input } = setup('fj', 0)
+  await waitFor(() => expect(keyboard()).toBeInTheDocument())
+
+  await user.type(input, 'fj')
+
+  expect(screen.getByRole('status')).toHaveTextContent('Klart!')
+  expect(keyboard()).not.toBeInTheDocument()
+})
+
+test('Börja om sits next to the keyboard switch', () => {
+  setup()
+  const restart = screen.getByRole('button', { name: 'Börja om' })
+  const toggle = screen.getByRole('switch', { name: 'Tangentbord' })
+  expect(restart.parentElement).toBe(toggle.closest('label')?.parentElement)
+})

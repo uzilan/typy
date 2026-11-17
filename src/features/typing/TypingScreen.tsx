@@ -101,18 +101,27 @@ export function TypingScreen({
         <p className={styles.crumb}>
           {level} · {title}
         </p>
-        <label className={styles.toggle}>
-          <input
-            type="checkbox"
-            role="switch"
-            checked={showKeyboard}
-            onChange={(e) => {
-              update({ showKeyboard: e.target.checked })
-              inputRef.current?.focus()
-            }}
-          />
-          Tangentbord
-        </label>
+        <div className={styles.actions}>
+          <label className={styles.toggle}>
+            <input
+              type="checkbox"
+              role="switch"
+              checked={showKeyboard}
+              onChange={(e) => {
+                update({ showKeyboard: e.target.checked })
+                inputRef.current?.focus()
+              }}
+            />
+            Tangentbord
+          </label>
+          <button
+            type="button"
+            className={`${styles.secondary} ${styles.compact}`}
+            onClick={handleRestart}
+          >
+            Börja om
+          </button>
+        </div>
       </div>
 
       <div className={styles.card}>
@@ -179,7 +188,7 @@ export function TypingScreen({
           </span>
         </div>
 
-        {showKeyboard && (
+        {showKeyboard && !done && (
           <Keyboard
             nextChar={session.target[session.typed.length]}
             allowedKeys={allowedKeys}
@@ -206,16 +215,6 @@ export function TypingScreen({
           </button>
         </div>
       )}
-
-      <div>
-        <button
-          type="button"
-          className={styles.secondary}
-          onClick={handleRestart}
-        >
-          Börja om
-        </button>
-      </div>
     </div>
   )
 }

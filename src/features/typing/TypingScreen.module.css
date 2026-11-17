@@ -11,6 +11,12 @@
   gap: 16px;
 }
 
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 .toggle {
   display: flex;
   align-items: center;
@@ -197,4 +203,8 @@
   background: none;
   border: 1px solid var(--border-strong);
   color: var(--fg);
+}
+
+.compact {
+  padding: 6px 14px;
 }
