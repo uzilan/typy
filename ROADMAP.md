@@ -15,7 +15,7 @@ Each phase gets its own detailed plan when we start it.
 5. ✅ **Exercises & levels** — split in two:
    - ✅ **5a Content & data** — passages from public-domain Swedish literature (mainly Lagerlöf, _Nils Holgerssons underbara resa_; some Söderberg), post-1906 spelling only, untypeable characters normalized (” → ", – → -, … → ...). Levels derived deterministically from passages: short words → long words → sentences → punctuation & dialogue → whole passages.
    - ✅ **5b Screens** — level ladder (sequential unlock), router.
-   - ✅ **5c Beginner level** — "Lär dig tangenterna": 11 key-based lessons, texts from the Swedish Kelly word list (CC BY 4.0), skippable. On-screen keyboard on all levels.
+   - ✅ **5c Beginner level** — "Lär dig tangenterna": 11 key-based lessons, texts from the Swedish Kelly word list (CC BY 4.0), skippable. On-screen keyboard available on all levels, on by default in level 0.
 6. ✅ **In-memory storage** (done before 4, so the results screen has real history) — attempt history behind a storage interface (so Firebase can replace it later without touching the UI).
 7. ✅ **Progress overview** — history, personal bests, trends over time, repeat any exercise.
 8. **Visual polish** — design pass based on mockup learnings.
@@ -30,7 +30,7 @@ Mockups: <https://claude.ai/artifact/9tvMBF4B979R6gRRdRyEUP>
 - **Results screen** — B + C combined ("Resultat · Vald"): compact stats line (WPM, accuracy, time, errors) + attempt number, action buttons, the text with error positions marked (incl. corrected ones), "characters to practice" chips, then a table of all attempts on this exercise with the current one highlighted. Implies tracking errors per character and per position. "Öva på svåra tecken" (generate practice from weak chars) is in the design → weak-key analysis moves earlier than "extras".
 
 - **Levels** — level 0 is key-based: 11 lessons introducing the keys in order (home row → … → capitals), text generated from the Kelly word list, skippable ("Jag kan redan skriva"). Levels 1–5 stay text-based: short words → longer words → sentences → punctuation & numbers → longer texts.
-- **On-screen keyboard** — style C: keys coloured by finger, next key highlighted, untaught keys dimmed, hands showing which finger to use. "Tangentbord" switch top right of the typing screen; on by default in level 0, off elsewhere, remembered per user.
+- **On-screen keyboard** — style C: keys coloured by finger, next key highlighted, untaught keys dimmed, hands showing which finger to use. "Tangentbord" switch top right of the typing screen; on by default in level 0, off elsewhere, remembered per user across all levels.
 - **Exercise picker** — variant B ("Nivåstege"): vertical ladder of levels, each with status (Klar / Pågår / Låst) and a list of exercises showing best WPM + accuracy. **Levels unlock sequentially**: a level opens when every exercise in the previous one has been done at least once.
 - **Progress overview** — variant A ("Trend"): summary tiles (best WPM, avg WPM, avg accuracy, practice days), two separate line charts over time (WPM, accuracy) with hover values, range toggle (last 14 days / all).
 - **Navigation flow** — Övningar (ladder) ⇄ Mina framsteg via top nav; ladder → typing → results → "Försök igen" / "Nästa övning" / "Alla övningar". Light/dark toggle lives in the app header (built in phase 0).
