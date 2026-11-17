@@ -57,3 +57,13 @@ test('no lesson contains an excluded word', () => {
       expect(EXCLUDED_WORDS.has(w), `${l.number}: ${w}`).toBe(false)
   }
 })
+
+test('lesson 11 capitalises only the first word of each sentence', () => {
+  const words = lessonText(11).split(' ')
+  const capitalised = words.filter((w) => /^[A-ZÅÄÖ]/.test(w))
+  expect(capitalised.length).toBeGreaterThanOrEqual(3)
+  words.forEach((w, i) => {
+    if (/^[A-ZÅÄÖ]/.test(w))
+      expect(i === 0 || words[i - 1]!.endsWith('.')).toBe(true)
+  })
+})

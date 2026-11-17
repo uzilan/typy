@@ -281,13 +281,12 @@ function punctuate(words: string[], random: () => number): string[] {
   return result
 }
 
-function capitalise(words: string[], random: () => number): string[] {
-  return words.map((w, i) => {
-    const startsSentence = i === 0 || words[i - 1]?.endsWith('.')
-    return startsSentence || random() < 0.2
+function capitalise(words: string[]): string[] {
+  return words.map((w, i) =>
+    i === 0 || words[i - 1]?.endsWith('.')
       ? w.charAt(0).toUpperCase() + w.slice(1)
-      : w
-  })
+      : w,
+  )
 }
 
 export function lessonText(lessonNumber: number): string {
@@ -301,6 +300,6 @@ export function lessonText(lessonNumber: number): string {
     drillParts.join(' ').length + (drillParts.length > 0 ? 1 : 0)
   let words = pickWords(lessonNumber, lesson.newKeys, drillLength, random)
   if (lessonNumber >= FIRST_PUNCTUATION_LESSON) words = punctuate(words, random)
-  if (lessonNumber === CAPITALS_LESSON) words = capitalise(words, random)
+  if (lessonNumber === CAPITALS_LESSON) words = capitalise(words)
   return [...drillParts, ...words].join(' ')
 }
