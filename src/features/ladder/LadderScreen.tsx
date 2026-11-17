@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import { LEVELS } from '../../content/levels'
+import { useSettings } from '../../storage/useSettings'
 import { useAllAttempts } from '../../storage/useAllAttempts'
 import { levelProgress, type LevelStatus } from './progress'
 import styles from './LadderScreen.module.css'
@@ -18,9 +19,11 @@ const DOT_CLASS: Record<LevelStatus, string | undefined> = {
 
 export function LadderScreen() {
   const attempts = useAllAttempts()
-  if (attempts === null) return <p className={styles.muted}>Laddar…</p>
+  const { settings } = useSettings()
+  if (attempts === null || settings === null)
+    return <p className={styles.muted}>Laddar…</p>
 
-  const progress = levelProgress(LEVELS, attempts)
+  const progress = levelProgress(LEVELS, attempts, settings.skippedLevel0)
 
   return (
     <div className={styles.screen}>

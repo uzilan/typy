@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from 'react-router'
 import { findExercise, levelLabel, LEVELS } from '../../content/levels'
+import { useSettings } from '../../storage/useSettings'
 import { useAllAttempts } from '../../storage/useAllAttempts'
 import { nextExercise } from '../ladder/progress'
 import { ResultsScreen } from '../results/ResultsScreen'
@@ -9,12 +10,18 @@ export function ResultsRoute() {
   const { id = '', attemptId = '' } = useParams()
   const navigate = useNavigate()
   const attempts = useAllAttempts()
+  const { settings } = useSettings()
   const exercise = findExercise(id)
 
   if (!exercise) return <NotFound message="Övningen finns inte." />
-  if (attempts === null) return null
+  if (attempts === null || settings === null) return null
 
-  const next = nextExercise(exercise.id, LEVELS, attempts)
+  const next = nextExercise(
+    exercise.id,
+    LEVELS,
+    attempts,
+    settings.skippedLevel0,
+  )
 
   return (
     <ResultsScreen

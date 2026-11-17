@@ -26,13 +26,28 @@ function isComplete(level: Level, tried: Set<string>): boolean {
   return level.exercises.every((e) => tried.has(e.id))
 }
 
-/** Levels 0 and 1 are always open; level N opens when every level 1..N-1 is complete (level 0 never counts). */
+/**
+ * Level 0 is always open. Level 1 opens once level 0 was tried, was skipped, or
+ * the user already has attempts on a later level. Level N >= 2 opens when every
+ * level 1..N-1 is complete (level 0 never counts).
+ */
 export function isUnlocked(
   levelNumber: number,
   levels: Level[],
   attempts: Attempt[],
+  skippedLevel0: boolean,
 ): boolean {
+  if (levelNumber <= 0) return true
   const tried = triedIds(attempts)
+  if (levelNumber === 1) {
+    return (
+      skippedLevel0 ||
+      levels.filter((l) => l.number === 0).every((l) => isComplete(l, tried)) ||
+      levels.some(
+        (l) => l.number >= 1 && l.exercises.some((e) => tried.has(e.id)),
+      )
+    )
+  }
   return levels
     .filter((l) => l.number >= 1 && l.number < levelNumber)
     .every((l) => isComplete(l, tried))
@@ -41,6 +56,7 @@ export function isUnlocked(
 export function levelProgress(
   levels: Level[],
   attempts: Attempt[],
+  skippedLevel0: boolean,
 ): LevelProgress[] {
   const tried = triedIds(attempts)
   return levels.map((level) => {
@@ -52,7 +68,12 @@ export function levelProgress(
       for (const a of own) if (!best || a.wpm > best.wpm) best = a
       return { exercise, tries: own.length, best }
     })
-    const status: LevelStatus = !isUnlocked(level.number, levels, attempts)
+    const status: LevelStatus = !isUnlocked(
+      level.number,
+      levels,
+      attempts,
+      skippedLevel0,
+    )
       ? 'locked'
       : isComplete(level, tried)
         ? 'done'
@@ -71,10 +92,13 @@ export function nextExercise(
   currentId: string,
   levels: Level[],
   attempts: Attempt[],
+  skippedLevel0: boolean,
 ): Exercise | null {
   const all = levels.flatMap((l) => l.exercises)
   const index = all.findIndex((e) => e.id === currentId)
   const next = index < 0 ? undefined : all[index + 1]
   if (!next) return null
-  return isUnlocked(next.levelNumber, levels, attempts) ? next : null
+  return isUnlocked(next.levelNumber, levels, attempts, skippedLevel0)
+    ? next
+    : null
 }

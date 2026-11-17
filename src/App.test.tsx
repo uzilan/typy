@@ -6,13 +6,12 @@ import { LEVELS } from './content/levels'
 import { InMemoryAttemptStore } from './storage/InMemoryAttemptStore'
 import { InMemorySettingsStore } from './storage/InMemorySettingsStore'
 
-function renderAt(path: string) {
+async function renderAt(path: string, skippedLevel0 = true) {
+  const settings = new InMemorySettingsStore()
+  await settings.update({ skippedLevel0 })
   render(
     <MemoryRouter initialEntries={[path]}>
-      <App
-        store={new InMemoryAttemptStore()}
-        settings={new InMemorySettingsStore()}
-      />
+      <App store={new InMemoryAttemptStore()} settings={settings} />
     </MemoryRouter>,
   )
 }
@@ -20,7 +19,7 @@ function renderAt(path: string) {
 test('ladder → exercise → results → next exercise / back to ladder', async () => {
   const user = userEvent.setup()
   const [first, second] = LEVELS[1]!.exercises
-  renderAt('/')
+  await renderAt('/')
 
   await user.click(
     await screen.findByRole('link', { name: new RegExp(first!.title) }),
@@ -46,7 +45,7 @@ test('ladder → exercise → results → next exercise / back to ladder', async
 test('Försök igen returns to a fresh typing screen', async () => {
   const user = userEvent.setup()
   const first = LEVELS[1]!.exercises[0]!
-  renderAt(`/ovning/${first.id}`)
+  await renderAt(`/ovning/${first.id}`)
 
   const input = await screen.findByLabelText('Skriv texten ovan här')
   await user.click(input)
@@ -58,16 +57,25 @@ test('Försök igen returns to a fresh typing screen', async () => {
 })
 
 test('a locked exercise redirects to the ladder', async () => {
-  renderAt(`/ovning/${LEVELS[2]!.exercises[0]!.id}`)
+  await renderAt(`/ovning/${LEVELS[2]!.exercises[0]!.id}`)
 
   expect(
     await screen.findByRole('heading', { name: 'Övningar' }),
   ).toBeInTheDocument()
 })
 
+test('a new user opening a level 1 exercise is redirected to the ladder', async () => {
+  await renderAt(`/ovning/${LEVELS[1]!.exercises[0]!.id}`, false)
+
+  expect(
+    await screen.findByRole('heading', { name: 'Övningar' }),
+  ).toBeInTheDocument()
+  expect(screen.queryByLabelText('Skriv texten ovan här')).toBeNull()
+})
+
 test('the menu leads to progress and back to the exercises', async () => {
   const user = userEvent.setup()
-  renderAt(`/ovning/${LEVELS[1]!.exercises[0]!.id}`)
+  await renderAt(`/ovning/${LEVELS[1]!.exercises[0]!.id}`)
   const menu = await screen.findByRole('navigation', { name: 'Huvudmeny' })
 
   await user.click(within(menu).getByRole('link', { name: 'Mina framsteg' }))
@@ -85,7 +93,7 @@ test('the menu leads to progress and back to the exercises', async () => {
 })
 
 test('an unknown exercise shows a not-found message', async () => {
-  renderAt('/ovning/finns-inte')
+  await renderAt('/ovning/finns-inte')
 
   expect(
     await screen.findByRole('heading', { name: 'Övningen finns inte.' }),

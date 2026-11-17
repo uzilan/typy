@@ -4,6 +4,8 @@ import { LEVELS } from '../../content/levels'
 import type { NewAttempt } from '../../storage/attempt'
 import { AttemptStoreContext } from '../../storage/AttemptStoreContext'
 import { InMemoryAttemptStore } from '../../storage/InMemoryAttemptStore'
+import { InMemorySettingsStore } from '../../storage/InMemorySettingsStore'
+import { SettingsStoreContext } from '../../storage/SettingsStoreContext'
 import { LadderScreen } from './LadderScreen'
 
 function attempt(exerciseId: string, wpm = 30, accuracy = 95): NewAttempt {
@@ -20,14 +22,21 @@ function attempt(exerciseId: string, wpm = 30, accuracy = 95): NewAttempt {
   }
 }
 
-async function setup(attempts: NewAttempt[] = []) {
+async function setup(
+  attempts: NewAttempt[] = [],
+  settings: { skippedLevel0: boolean } = { skippedLevel0: false },
+) {
   const store = new InMemoryAttemptStore()
   for (const a of attempts) await store.add(a)
+  const settingsStore = new InMemorySettingsStore()
+  await settingsStore.update(settings)
   render(
     <AttemptStoreContext value={store}>
-      <MemoryRouter>
-        <LadderScreen />
-      </MemoryRouter>
+      <SettingsStoreContext value={settingsStore}>
+        <MemoryRouter>
+          <LadderScreen />
+        </MemoryRouter>
+      </SettingsStoreContext>
     </AttemptStoreContext>,
   )
   await screen.findByRole('heading', { name: 'Övningar' })
@@ -38,8 +47,17 @@ function levelSection(number: number) {
   return screen.getByRole('region', { name: level.name })
 }
 
-test('level 1 is open with links to its exercises, the rest are locked', async () => {
+test('a new user has level 0 open and level 1 locked', async () => {
   await setup()
+
+  expect(within(levelSection(0)).getAllByRole('link').length).toBeGreaterThan(0)
+  const l1 = levelSection(1)
+  expect(within(l1).getByText('Låst')).toBeInTheDocument()
+  expect(within(l1).queryAllByRole('link')).toHaveLength(0)
+})
+
+test('level 1 is open with links to its exercises, the rest are locked', async () => {
+  await setup([], { skippedLevel0: true })
 
   const l1 = levelSection(1)
   expect(within(l1).getByText(/Pågår · 0\/5/)).toBeInTheDocument()
