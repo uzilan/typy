@@ -5,7 +5,7 @@ import { SignInScreen } from './auth/SignInScreen'
 import { useAuthUser } from './auth/useAuthUser'
 import { auth, db } from './firebase/app'
 import { FirestoreAttemptStore } from './storage/FirestoreAttemptStore'
-import { InMemorySettingsStore } from './storage/InMemorySettingsStore'
+import { FirestoreSettingsStore } from './storage/FirestoreSettingsStore'
 
 /** Sign-in gate: the app is only shown to a signed-in user, with their own store. */
 export function Root() {
@@ -16,10 +16,13 @@ export function Root() {
     [uid],
   )
 
-  const settings = useMemo(() => new InMemorySettingsStore(), [])
+  const settings = useMemo(
+    () => (uid ? new FirestoreSettingsStore(db, uid) : null),
+    [uid],
+  )
 
   if (user === undefined) return null // restoring the session; brief
-  if (!store) {
+  if (!store || !settings) {
     return (
       <SignInScreen
         onSignIn={async () => {
@@ -28,7 +31,6 @@ export function Root() {
       />
     )
   }
-  // Temporary: Task 5 replaces this with the Firestore settings store.
   return (
     <App store={store} settings={settings} onSignOut={() => signOut(auth)} />
   )

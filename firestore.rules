@@ -20,6 +20,13 @@ rules_version = '2';
 //   - errorPositions: list (required, ≤ 2000 items) - positions typed wrong
 //   - missesByChar: map (required, ≤ 200 keys) - errors per expected char
 //
+// Document: users/{uid}
+// Owner: the user whose uid is the document ID. Created and updated by the
+// owner (merge writes); never deleted by clients.
+// Fields (all optional; the app falls back to defaults when absent):
+//   - skippedLevel0: bool - the user chose to skip the beginner level
+//   - showKeyboard: bool - show the on-screen keyboard
+//
 // No other collections are used; everything else is denied.
 //
 // ===============================================================
@@ -83,9 +90,22 @@ service cloud.firestore {
         data.missesByChar is map && data.missesByChar.size() <= 200;
     }
 
+    function isValidSettings(data) {
+      return hasOnlyAllowedFields(['skippedLevel0', 'showKeyboard']) &&
+        (!('skippedLevel0' in data) || data.skippedLevel0 is bool) &&
+        (!('showKeyboard' in data) || data.showKeyboard is bool);
+    }
+
     // ===============================================================
     // Rules
     // ===============================================================
+
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create, update: if isOwner(userId) &&
+        isValidSettings(request.resource.data);
+      allow delete: if false;
+    }
 
     match /users/{userId}/attempts/{attemptId} {
       // Owner only. Covers the app's queries: all attempts ordered by

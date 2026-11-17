@@ -9,6 +9,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   setDoc,
   updateDoc,
@@ -118,5 +119,59 @@ describe('validation on create', () => {
     ['missesByChar not a map', valid({ missesByChar: [] })],
   ])('rejects %s', async (_, data) => {
     await assertFails(addDoc(aliceAttempts(alice()), data))
+  })
+})
+
+describe('user settings (users/{uid})', () => {
+  const aliceSettings = (db: ReturnType<typeof alice>) => doc(db, 'users/alice')
+
+  async function seedAliceSettings() {
+    await env.withSecurityRulesDisabled(async (ctx) => {
+      await setDoc(doc(ctx.firestore(), 'users/alice'), {
+        skippedLevel0: false,
+      })
+    })
+  }
+
+  test('owner can create, read and update their settings', async () => {
+    await assertSucceeds(
+      setDoc(aliceSettings(alice()), { skippedLevel0: true }),
+    )
+    await assertSucceeds(getDoc(aliceSettings(alice())))
+    await assertSucceeds(
+      setDoc(aliceSettings(alice()), { showKeyboard: false }, { merge: true }),
+    )
+    await assertSucceeds(
+      updateDoc(aliceSettings(alice()), { showKeyboard: true }),
+    )
+  })
+
+  test("another user cannot read or write alice's settings", async () => {
+    await seedAliceSettings()
+
+    await assertFails(getDoc(aliceSettings(bob())))
+    await assertFails(setDoc(aliceSettings(bob()), { skippedLevel0: true }))
+    await assertFails(updateDoc(aliceSettings(bob()), { skippedLevel0: true }))
+  })
+
+  test('signed out: no reads, no writes', async () => {
+    await seedAliceSettings()
+
+    await assertFails(getDoc(aliceSettings(anon())))
+    await assertFails(setDoc(aliceSettings(anon()), { skippedLevel0: true }))
+  })
+
+  test('owner cannot delete the settings', async () => {
+    await seedAliceSettings()
+    await assertFails(deleteDoc(aliceSettings(alice())))
+  })
+
+  test.each([
+    ['an unknown field', { admin: true }],
+    ['skippedLevel0 as a string', { skippedLevel0: 'yes' }],
+    ['showKeyboard as a string', { showKeyboard: 'no' }],
+  ])('rejects %s', async (_, data) => {
+    await assertFails(setDoc(aliceSettings(alice()), data))
+    await assertFails(setDoc(aliceSettings(alice()), data, { merge: true }))
   })
 })

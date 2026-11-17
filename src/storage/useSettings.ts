@@ -26,7 +26,10 @@ export function useSettings(): {
   const update = useCallback(
     (patch: Partial<UserSettings>) => {
       setSettings((current) => (current ? { ...current, ...patch } : current))
-      void store.update(patch)
+      // Keep the optimistic value if the write fails; just report it.
+      store.update(patch).catch((err: unknown) => {
+        console.error('Could not save settings', err)
+      })
     },
     [store],
   )
